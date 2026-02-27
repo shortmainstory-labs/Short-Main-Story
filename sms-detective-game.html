@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>SMS Detective — Can You Spot the Scam?</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --yellow: #FFD60A;
+  --yellow-dim: #e6c009;
+  --yellow-glow: rgba(255,214,10,0.25);
+  --black: #0a0a0a;
+  --black2: #111111;
+  --black3: #161616;
+  --surface: #1a1a1a;
+  --red: #FF4757;
+  --red-glow: rgba(255,71,87,0.3);
+  --green: #2ED573;
+  --green-glow: rgba(46,213,115,0.3);
+  --blue: #54a0ff;
+  --white: #f5f5f5;
+  --white-dim: rgba(255,255,255,0.6);
+  --white-muted: rgba(255,255,255,0.3);
+  --border: rgba(255,255,255,0.06);
+  --font-display: 'Syne', sans-serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--white);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* ===== PHONE FRAME ===== */
+.phone-frame {
+  width: 100%; max-width: 800px; min-height: 100vh;
+  background: var(--black2);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.phone-notch {
+  display: none;
+}
+
+.phone-status {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 14px 24px;
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--white-dim);
+  border-bottom: 1px solid var(--border);
+  background: rgba(10,10,10,0.8);
+  backdrop-filter: blur(12px);
+  position: sticky; top: 0; z-index: 10;
+}
+.btn-back-nav {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--white-dim); font-family: var(--font-body);
+  font-size: 0.8rem; font-weight: 500;
+  padding: 6px 14px; border-radius: 8px;
+  cursor: pointer; transition: all 0.2s; display: none;
+}
+.btn-back-nav:hover { border-color: var(--yellow); color: var(--yellow); }
+.btn-back-nav.show { display: block; }
+
+.phone-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+/* ===== SCREENS ===== */
+.screen {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  padding: 24px 28px;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+  overflow-y: auto;
+}
+.screen.active {
+  opacity: 1; transform: translateX(0); pointer-events: all;
+}
+.screen.exit {
+  opacity: 0; transform: translateX(-100%);
+}
+
+/* ===== WELCOME SCREEN ===== */
+.welcome-logo {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.6rem; text-align: center;
+  margin-top: 30px;
+  letter-spacing: -0.02em;
+}
+.welcome-logo span { color: var(--yellow); }
+.welcome-badge {
+  font-family: var(--font-mono); font-size: 0.55rem;
+  text-transform: uppercase; letter-spacing: 0.15em;
+  color: var(--yellow); text-align: center;
+  margin-top: 8px;
+}
+.welcome-icon {
+  font-size: 4rem; text-align: center;
+  margin: 24px 0 16px;
+  animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.welcome-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.8rem; text-align: center;
+  line-height: 1.3; margin-bottom: 8px;
+}
+.welcome-desc {
+  font-size: 0.82rem; color: var(--white-dim);
+  text-align: center; line-height: 1.6;
+  font-weight: 300; margin-bottom: 24px;
+}
+.welcome-stats {
+  display: flex; gap: 8px; margin-bottom: 24px;
+}
+.stat-card {
+  flex: 1; background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px; padding: 12px 8px;
+  text-align: center;
+}
+.stat-num {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.1rem; color: var(--yellow);
+}
+.stat-label {
+  font-size: 0.6rem; color: var(--white-muted);
+  margin-top: 2px;
+}
+
+/* ===== AGE SELECT ===== */
+.age-title {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.15rem; text-align: center;
+  margin: 20px 0 6px;
+}
+.age-subtitle {
+  font-size: 0.75rem; color: var(--white-dim);
+  text-align: center; margin-bottom: 20px;
+}
+.age-grid { display: flex; flex-direction: column; gap: 10px; }
+.age-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex; align-items: center; gap: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.age-card:hover {
+  border-color: var(--yellow);
+  transform: translateX(4px);
+  box-shadow: 0 0 20px var(--yellow-glow);
+}
+.age-card:active { transform: scale(0.97); }
+.age-emoji { font-size: 2rem; }
+.age-info h3 {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 0.95rem;
+}
+.age-info p {
+  font-size: 0.7rem; color: var(--white-dim); margin-top: 2px;
+}
+.age-tag {
+  margin-left: auto;
+  font-family: var(--font-mono); font-size: 0.55rem;
+  color: var(--yellow); background: rgba(255,214,10,0.08);
+  border: 1px solid rgba(255,214,10,0.15);
+  padding: 3px 8px; border-radius: 6px;
+}
+
+/* ===== GAME SCREEN ===== */
+.game-header {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; flex-shrink: 0;
+}
+.game-score {
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--yellow);
+}
+.game-level {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  color: var(--white-muted);
+}
+.game-streak {
+  font-size: 0.65rem; color: var(--green);
+  font-family: var(--font-mono);
+}
+
+.inbox-label {
+  font-family: var(--font-mono); font-size: 0.55rem;
+  text-transform: uppercase; letter-spacing: 0.12em;
+  color: var(--white-muted); margin-bottom: 10px;
+  display: flex; align-items: center; gap: 6px;
+}
+.inbox-dot {
+  width: 6px; height: 6px; background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Message bubble */
+.msg-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+.msg-bubble {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px 16px 16px 4px;
+  padding: 14px 16px;
+  animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.msg-sender {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  font-weight: 600; color: var(--blue);
+  margin-bottom: 6px;
+  display: flex; align-items: center; gap: 6px;
+}
+.msg-sender-icon {
+  width: 20px; height: 20px; border-radius: 50%;
+  background: rgba(84,160,255,0.15);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.6rem;
+}
+.msg-text {
+  font-size: 1rem; line-height: 1.7;
+  font-weight: 400;
+}
+.msg-text a, .msg-text .fake-link {
+  color: var(--blue); text-decoration: underline;
+  cursor: default;
+}
+.msg-time {
+  font-family: var(--font-mono); font-size: 0.5rem;
+  color: var(--white-muted); margin-top: 8px;
+  text-align: right;
+}
+.msg-context {
+  font-size: 0.65rem; color: var(--white-muted);
+  font-style: italic; margin-bottom: 10px;
+  background: rgba(255,255,255,0.03);
+  padding: 8px 12px;
+  border-radius: 8px;
+  border-left: 2px solid var(--yellow);
+  animation: slideUp 0.3s ease;
+}
+
+/* Buttons */
+.action-btns {
+  display: flex; gap: 10px;
+  margin-top: auto;
+  padding-top: 12px;
+  flex-shrink: 0;
+}
+.btn-safe, .btn-scam {
+  flex: 1; padding: 14px;
+  border: none; border-radius: 14px;
+  font-family: var(--font-body);
+  font-weight: 700; font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex; align-items: center;
+  justify-content: center; gap: 8px;
+}
+.btn-safe {
+  background: rgba(46,213,115,0.12);
+  border: 1.5px solid rgba(46,213,115,0.3);
+  color: var(--green);
+}
+.btn-safe:hover { background: rgba(46,213,115,0.2); box-shadow: 0 0 20px var(--green-glow); }
+.btn-scam {
+  background: rgba(255,71,87,0.12);
+  border: 1.5px solid rgba(255,71,87,0.3);
+  color: var(--red);
+}
+.btn-scam:hover { background: rgba(255,71,87,0.2); box-shadow: 0 0 20px var(--red-glow); }
+.btn-safe:active, .btn-scam:active { transform: scale(0.95); }
+
+/* ===== DISTRACTION SCREEN ===== */
+.distraction-container {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 20px;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+}
+.distraction-container.active {
+  opacity: 1; pointer-events: all;
+}
+.distraction-bg {
+  position: absolute; inset: 0;
+  border-radius: 0;
+}
+.distraction-content {
+  position: relative; z-index: 2;
+  text-align: center;
+  width: 100%;
+}
+.distraction-emoji {
+  font-size: 4rem;
+  margin-bottom: 16px;
+  animation: shake 0.5s infinite;
+}
+@keyframes shake {
+  0%,100% { transform: rotate(0deg); }
+  25% { transform: rotate(-5deg); }
+  75% { transform: rotate(5deg); }
+}
+@keyframes zoomPulse {
+  0%,100% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+}
+.distraction-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.4rem; margin-bottom: 8px;
+}
+.distraction-sub {
+  font-size: 0.8rem; color: var(--white-dim);
+  margin-bottom: 20px;
+}
+.distraction-timer {
+  font-family: var(--font-mono); font-size: 2rem;
+  font-weight: 600; color: var(--yellow);
+  margin-bottom: 20px;
+}
+.distraction-game {
+  margin: 16px 0;
+}
+.math-input {
+  background: var(--surface);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  color: var(--white);
+  font-family: var(--font-mono);
+  font-size: 1.5rem;
+  text-align: center;
+  width: 120px;
+  padding: 10px;
+  outline: none;
+}
+.tap-target {
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: var(--yellow);
+  position: absolute;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem;
+  box-shadow: 0 0 30px var(--yellow-glow);
+}
+.tap-target:active { transform: scale(0.8); }
+.tap-arena {
+  width: 100%; height: 200px;
+  position: relative;
+  background: rgba(255,255,255,0.03);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+.tap-score {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  color: var(--yellow);
+  margin-top: 10px;
+}
+
+/* ===== RESULT OVERLAY ===== */
+.result-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.4s;
+}
+.result-overlay.active {
+  opacity: 1; pointer-events: all;
+}
+.result-overlay.correct { background: rgba(46,213,115,0.08); }
+.result-overlay.wrong { background: rgba(255,71,87,0.08); }
+.result-emoji {
+  font-size: 3.5rem;
+  margin-bottom: 12px;
+}
+.result-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.3rem; margin-bottom: 8px;
+}
+.result-overlay.correct .result-title { color: var(--green); }
+.result-overlay.wrong .result-title { color: var(--red); }
+.result-explain {
+  font-size: 0.8rem; color: var(--white-dim);
+  text-align: center; line-height: 1.6;
+  margin-bottom: 8px;
+  max-height: 180px;
+  overflow-y: auto;
+}
+.result-realstory {
+  font-size: 0.7rem; color: var(--yellow);
+  text-align: center; line-height: 1.5;
+  font-family: var(--font-mono);
+  background: rgba(255,214,10,0.05);
+  border: 1px solid rgba(255,214,10,0.1);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-bottom: 16px;
+}
+.btn-next {
+  background: var(--yellow);
+  color: var(--black);
+  border: none; border-radius: 12px;
+  padding: 12px 32px;
+  font-family: var(--font-body);
+  font-weight: 700; font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-next:hover { box-shadow: 0 0 30px var(--yellow-glow); transform: translateY(-2px); }
+.btn-next:active { transform: scale(0.95); }
+
+/* ===== GAME OVER SCREEN ===== */
+.gameover-emoji {
+  font-size: 4rem; text-align: center;
+  margin: 20px 0 12px;
+}
+.gameover-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 1.5rem; text-align: center;
+  margin-bottom: 6px;
+}
+.gameover-subtitle {
+  font-size: 0.85rem; color: var(--white-dim);
+  text-align: center; margin-bottom: 24px;
+}
+.score-card {
+  background: var(--surface);
+  border: 1.5px solid rgba(255,214,10,0.2);
+  border-radius: 18px;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.score-big {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: 3rem; color: var(--yellow);
+}
+.score-label {
+  font-family: var(--font-mono); font-size: 0.6rem;
+  text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--white-muted);
+}
+.score-details {
+  display: flex; gap: 10px; margin-top: 14px;
+}
+.score-detail {
+  flex: 1; background: rgba(255,255,255,0.03);
+  border-radius: 10px; padding: 10px;
+}
+.score-detail-num {
+  font-family: var(--font-display); font-weight: 700;
+  font-size: 1.2rem;
+}
+.score-detail-num.green { color: var(--green); }
+.score-detail-num.red { color: var(--red); }
+.score-detail-label {
+  font-size: 0.6rem; color: var(--white-muted); margin-top: 2px;
+}
+.rank-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: rgba(255,214,10,0.08);
+  border: 1px solid rgba(255,214,10,0.2);
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-family: var(--font-mono); font-size: 0.7rem;
+  color: var(--yellow);
+  margin: 12px 0 20px;
+}
+.share-row { display: flex; gap: 8px; margin-top: 8px; }
+.btn-restart, .btn-share {
+  flex: 1; padding: 12px;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  font-weight: 600; font-size: 0.85rem;
+  cursor: pointer; border: none;
+  transition: all 0.2s;
+}
+.btn-restart {
+  background: var(--yellow); color: var(--black);
+}
+.btn-share {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--white);
+}
+.btn-restart:hover, .btn-share:hover { transform: translateY(-2px); }
+
+/* ===== COMMON ===== */
+.btn-start {
+  display: block; width: 100%;
+  background: var(--yellow);
+  color: var(--black);
+  border: none; border-radius: 14px;
+  padding: 14px;
+  font-family: var(--font-body);
+  font-weight: 700; font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 30px var(--yellow-glow);
+}
+.btn-start:hover { box-shadow: 0 0 50px rgba(255,214,10,0.3); transform: translateY(-2px); }
+.btn-start:active { transform: scale(0.97); }
+
+.powered-by {
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  color: var(--white-muted);
+  text-align: center;
+  padding: 10px 0;
+  letter-spacing: 0.05em;
+}
+
+/* Notification animation */
+@keyframes notifSlide {
+  0% { transform: translateY(-100%); opacity: 0; }
+  10% { transform: translateY(0); opacity: 1; }
+  90% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(-100%); opacity: 0; }
+}
+.notification {
+  position: absolute;
+  top: 40px; left: 12px; right: 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 12px 14px;
+  z-index: 30;
+  animation: notifSlide 2.5s ease forwards;
+  display: flex; align-items: center; gap: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.notif-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(255,214,10,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; flex-shrink: 0;
+}
+.notif-text {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+.notif-app {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--white-muted);
+}
+
+/* Screen shake for wrong answer */
+@keyframes screenShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+.shake { animation: screenShake 0.4s ease; }
+
+@media (max-width: 600px) {
+  .phone-frame { width: 100%; }
+  .screen { padding: 16px; }
+  .welcome-title { font-size: 1.2rem; }
+  .msg-text { font-size: 0.9rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="phone-frame" id="phone">
+  <div class="phone-notch"></div>
+  <div class="phone-status">
+    <button class="btn-back-nav" id="btnBack" onclick="goBack()">← Back</button>
+    <span style="font-family:var(--font-display);font-weight:800;font-size:1rem;">SMS <span style="color:var(--yellow)">Detective</span></span>
+    <span style="font-size:0.5rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--yellow)">by SMS Labs</span>
+  </div>
+
+  <div class="phone-content" id="phoneContent">
+
+    <!-- WELCOME SCREEN -->
+    <div class="screen active" id="screenWelcome">
+      <div class="welcome-logo">SMS <span>Detective</span></div>
+      <div class="welcome-badge">by SMS Labs</div>
+      <div class="welcome-icon">🕵️</div>
+      <div class="welcome-title">Can You Spot<br>the Scam?</div>
+      <div class="welcome-desc">Real scam scenarios. Real stories.<br>Train your brain to detect fraud —<br>even when you're distracted.</div>
+      <div class="welcome-stats">
+        <div class="stat-card">
+          <div class="stat-num">$16.6B</div>
+          <div class="stat-label">Lost to scams in 2024</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">$83K</div>
+          <div class="stat-label">Avg senior loss</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">33%</div>
+          <div class="stat-label">Increase YoY</div>
+        </div>
+      </div>
+      <button class="btn-start" onclick="showScreen('screenAge')">Start Training →</button>
+      <div class="powered-by">Powered by SMS Labs · Free to play</div>
+    </div>
+
+    <!-- AGE SELECT SCREEN -->
+    <div class="screen" id="screenAge">
+      <div class="age-title">Who's Playing?</div>
+      <div class="age-subtitle">Scenarios adapt to your age group</div>
+      <div class="age-grid">
+        <div class="age-card" onclick="startGame('kids')">
+          <div class="age-emoji">🧒</div>
+          <div class="age-info">
+            <h3>Kids</h3>
+            <p>Ages 8-12 · Street smart basics</p>
+          </div>
+          <div class="age-tag">5 levels</div>
+        </div>
+        <div class="age-card" onclick="startGame('teens')">
+          <div class="age-emoji">🧑‍💻</div>
+          <div class="age-info">
+            <h3>Teens</h3>
+            <p>Ages 13-17 · Digital survival</p>
+          </div>
+          <div class="age-tag">5 levels</div>
+        </div>
+        <div class="age-card" onclick="startGame('adults')">
+          <div class="age-emoji">👩‍💼</div>
+          <div class="age-info">
+            <h3>Adults</h3>
+            <p>Ages 25-55 · Advanced threats</p>
+          </div>
+          <div class="age-tag">5 levels</div>
+        </div>
+        <div class="age-card" onclick="startGame('seniors')">
+          <div class="age-emoji">👴</div>
+          <div class="age-info">
+            <h3>Seniors</h3>
+            <p>Ages 60+ · Stay safe daily</p>
+          </div>
+          <div class="age-tag">5 levels</div>
+        </div>
+      </div>
+      <div class="powered-by" style="margin-top:auto;">Choose your level · All scenarios based on real cases</div>
+    </div>
+
+    <!-- GAME SCREEN -->
+    <div class="screen" id="screenGame">
+      <div class="game-header">
+        <div class="game-score">⭐ <span id="scoreDisplay">0</span></div>
+        <div class="game-level">Round <span id="roundDisplay">1</span>/5</div>
+        <div class="game-streak" id="streakDisplay"></div>
+      </div>
+      <div class="inbox-label">
+        <div class="inbox-dot"></div>
+        New message received
+      </div>
+      <div class="msg-container" id="msgContainer"></div>
+      <div class="action-btns" id="actionBtns">
+        <button class="btn-safe" onclick="answer(true)">✅ Safe</button>
+        <button class="btn-scam" onclick="answer(false)">🚨 Scam</button>
+      </div>
+    </div>
+
+    <!-- RESULT OVERLAY -->
+    <div class="result-overlay" id="resultOverlay">
+      <div class="result-emoji" id="resultEmoji"></div>
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-explain" id="resultExplain"></div>
+      <div class="result-realstory" id="resultStory"></div>
+      <button class="btn-next" id="btnNext" onclick="nextRound()">Next →</button>
+    </div>
+
+    <!-- DISTRACTION OVERLAY -->
+    <div class="distraction-container" id="distractionOverlay">
+      <div class="distraction-bg" id="distractionBg"></div>
+      <div class="distraction-content" id="distractionContent"></div>
+    </div>
+
+    <!-- GAME OVER SCREEN -->
+    <div class="screen" id="screenGameOver">
+      <div class="gameover-emoji" id="goEmoji"></div>
+      <div class="gameover-title" id="goTitle"></div>
+      <div class="gameover-subtitle" id="goSubtitle"></div>
+      <div class="score-card">
+        <div class="score-label">Final Score</div>
+        <div class="score-big" id="goScore">0</div>
+        <div class="score-details">
+          <div class="score-detail">
+            <div class="score-detail-num green" id="goCorrect">0</div>
+            <div class="score-detail-label">Caught</div>
+          </div>
+          <div class="score-detail">
+            <div class="score-detail-num red" id="goWrong">0</div>
+            <div class="score-detail-label">Missed</div>
+          </div>
+        </div>
+      </div>
+      <div class="rank-badge" id="goRank">🕵️ Rank: Rookie</div>
+      <div class="share-row">
+        <button class="btn-restart" onclick="showScreen('screenAge')">Play Again</button>
+        <button class="btn-share" onclick="shareResults()">Share 📤</button>
+      </div>
+      <div class="powered-by" style="margin-top:auto;">SMS Detective by SMS Labs · Protect your family</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ===== TRANSLATION SYSTEM =====
+const LANG = {
+  en: {
+    safe: "Safe", scam: "Scam", next: "Next →", round: "Round",
+    newMsg: "New message received", startTraining: "Start Training →",
+    correct: "CORRECT!", wrong: "OOPS!", youGotScammed: "You got scammed!",
+    niceWork: "Nice work, Detective!", playAgain: "Play Again",
+    share: "Share 📤", finalScore: "Final Score", caught: "Caught",
+    missed: "Missed"
+  }
+};
+function t(key) { return LANG['en'][key] || key; }
+
+// ===== GAME STATE =====
+let currentAge = 'adults';
+let currentRound = 0;
+let score = 0;
+let streak = 0;
+let correct = 0;
+let wrong = 0;
+let scenarios = [];
+let distractionPlayed = false;
+
+// ===== SCENARIOS DATABASE =====
+const SCENARIOS = {
+  kids: [
+    {
+      context: "🏫 You're walking home from school alone...",
+      sender: "Unknown Man",
+      senderIcon: "👤",
+      text: "Hey Peter! Your dad had an accident — he's in the hospital! Quick, get in my car, I'll take you to him right now! Hurry, there's no time!",
+      isScam: true,
+      explain: "A real emergency would come through your school, your mom, or the police — NEVER from a stranger on the street. A stranger who knows your name doesn't mean they know you. Scammers learn names from school bags, name tags, or overhearing friends.",
+      realStory: "📊 REAL CASE: In 2023, the FBI reported over 350 attempted child luring cases using the 'parent in hospital' trick. They learn kids' names from social media, backpacks, and school drop-off."
+    },
+    {
+      context: "📱 A message pops up while you're playing Roblox...",
+      sender: "R0BL0X_Admin",
+      senderIcon: "🎮",
+      text: "🎉 CONGRATULATIONS! You won 10,000 FREE Robux! Click here to claim: robIox-free.com/claim (expires in 5 min!!)",
+      isScam: true,
+      explain: "Look closely — the sender name uses a zero instead of 'O' (R0BL0X). The website 'robIox' uses a capital I instead of lowercase L. Real Roblox NEVER gives free Robux through random messages. These fake sites steal your account password!",
+      realStory: "📊 REAL CASE: Over 2 million Roblox accounts were hacked in 2023 through fake 'free Robux' sites. Kids enter their passwords thinking they'll get rewards, but instead lose their accounts and items."
+    },
+    {
+      context: "💬 Someone added you on a messaging app...",
+      sender: "CoolGamer2015",
+      senderIcon: "🎯",
+      text: "Hey! I'm 11 and I go to Lincoln school too! You seem really cool. Want to meet up at the park after school? Don't tell your parents tho, they'll say no because they don't get it 😂",
+      isScam: true,
+      explain: "MAJOR RED FLAGS: 1) 'Don't tell your parents' — anyone who says this is dangerous. 2) They claim to know your school but you've never met them. 3) They want to meet in person quickly. Real friends don't ask you to keep secrets from parents.",
+      realStory: "📊 REAL CASE: The National Center for Missing & Exploited Children reports that 1 in 5 children receive unwanted online approaches. Predators often pretend to be kids the same age."
+    },
+    {
+      context: "📧 You got an email about a school contest...",
+      sender: "Mrs. Johnson - School Office",
+      senderIcon: "📋",
+      text: "Hi! Your drawing was selected as a finalist in the art contest! 🎨 To confirm your entry, please ask your parent to fill in this form with their credit card for the $5 registration fee: school-art-prize.com/pay",
+      isScam: true,
+      explain: "Real school contests are free and announced IN school — not by email with payment links. Your school would never ask for credit card details through a random link. Always check with your teacher or parents first!",
+      realStory: "📊 REAL CASE: The FTC warns that fake contest scams targeting children increased 40% since 2022, often mimicking school communications to get parents' payment details."
+    },
+    {
+      context: "📱 A text from your mom's phone number...",
+      sender: "Mom 💕",
+      senderIcon: "👩",
+      text: "Hey sweetie! I left my lunch at home 😅 Can you bring it to the front gate? The school security guard will let you out. Love you!",
+      isScam: false,
+      explain: "This one is SAFE! It's from your mom's real number, it's a normal request, and there's no link, no urgency about money, and no request for personal info. It's okay to help — but if anything feels weird, always call back to double-check!",
+      realStory: "💡 TIP: Not everything is a scam! The skill is knowing the difference. Safe messages come from known contacts, ask for normal things, and don't involve links, money, or secrets."
+    }
+  ],
+
+  teens: [
+    {
+      context: "📱 You see this DM on Instagram...",
+      sender: "@crypto_wealth_fx",
+      senderIcon: "💰",
+      text: "Hey! I noticed your posts — you seem smart 🔥 I made $12,000 last month trading crypto. I can show you how, just need $50 to start. My mentor changed my life. DM me 'READY' and I'll send you the link 🚀💎",
+      isScam: true,
+      explain: "Classic 'pig butchering' scam! They compliment you, show fake profits, and ask for small money first. That $50 becomes $200, then $1000. The 'mentor' doesn't exist. The 'trading platform' is fake. Your money goes straight to scam compounds in Southeast Asia.",
+      realStory: "📊 REAL CASE: The UN identified scam compounds in Myanmar and Cambodia where trafficked workers run crypto scams 16+ hours a day. In 2024, crypto investment scams stole $5.8 billion from Americans alone."
+    },
+    {
+      context: "📧 Email from what looks like Spotify...",
+      sender: "Spotify Premium",
+      senderIcon: "🎵",
+      text: "Your Spotify Premium subscription payment failed. Your account will be deleted in 24 hours unless you update your payment method. Click here to keep your music: spotify-billing-update.com/renew",
+      isScam: true,
+      explain: "Check the URL — 'spotify-billing-update.com' is NOT Spotify's real website (spotify.com). Scammers create urgency ('24 hours!') to make you panic. Real Spotify emails come from @spotify.com and link to spotify.com only.",
+      realStory: "📊 REAL CASE: Phishing emails impersonating streaming services increased 250% in 2024. Teens are primary targets because they're the biggest streaming users."
+    },
+    {
+      context: "💼 You see a job post on TikTok...",
+      sender: "EasyWork Remote Jobs",
+      senderIcon: "💼",
+      text: "🔥 HIRING NOW: Work from home, $300/week! Just review products online. No experience needed. Age 16+. To start, we just need your bank details to set up direct deposit. Apply: easy-remote-work.com",
+      isScam: true,
+      explain: "No real job asks for bank details BEFORE you're hired. $300/week for 'reviewing products' with no experience? Too good to be true = always a scam. They'll use your bank account to launder stolen money, making YOU a 'money mule' — which is a crime.",
+      realStory: "📊 REAL CASE: The FBI warns that money mule recruitment through fake jobs is targeting teens on TikTok and Instagram. Victims can face criminal charges even though they didn't know the money was stolen."
+    },
+    {
+      context: "📱 Text from your phone carrier...",
+      sender: "T-Mobile Rewards",
+      senderIcon: "📶",
+      text: "T-Mobile customer appreciation! You've been selected for a FREE iPhone 16 Pro! Claim within 1 hour. Verify your identity at: tmobile-rewards-claim.co/iphone",
+      isScam: true,
+      explain: "T-Mobile's real website is t-mobile.com — not 'tmobile-rewards-claim.co'. Phone carriers NEVER give away phones via random texts. The '.co' domain is a red flag. They want your personal info to steal your identity.",
+      realStory: "📊 REAL CASE: Fake carrier reward scams generated over 14 million complaint texts to the FCC in 2024. The links lead to phishing sites that harvest social security numbers and credit card info."
+    },
+    {
+      context: "💬 A message in your school group chat...",
+      sender: "Alex (Classmate)",
+      senderIcon: "🧑",
+      text: "Hey everyone! Mrs. Rivera moved tomorrow's history test to Friday. She sent an email but some people didn't get it. Just wanted to make sure you all know! 📚",
+      isScam: false,
+      explain: "This is SAFE! It's from a known classmate in your real group chat, sharing school info with no links, no money, and no personal info requests. Normal life, normal message. Not everything is a threat!",
+      realStory: "💡 TIP: The best detective knows what's safe AND what's dangerous. Trust your real community — be suspicious of strangers and links."
+    }
+  ],
+
+  adults: [
+    {
+      context: "🏦 SMS from your bank's number...",
+      sender: "LuxTrust Security",
+      senderIcon: "🔐",
+      text: "⚠️ LuxTrust: Your digital certificate expires today. To avoid losing access to your banking, update now (free, takes 1 min): luxtrust-renew.eu/update",
+      isScam: true,
+      explain: "LuxTrust would NEVER send renewal links via SMS. The domain 'luxtrust-renew.eu' is fake — real LuxTrust uses luxtrust.com. Always go directly to your bank's website or app. This is one of the most common scams in Luxembourg and Europe.",
+      realStory: "📊 REAL CASE: In 2024, Luxembourg police (Police Grand-Ducale) reported a 200%+ increase in LuxTrust phishing. Victims lost up to €50,000 in minutes. The fake sites are pixel-perfect copies."
+    },
+    {
+      context: "📱 You just received this notification...",
+      sender: "BGL BNP Paribas",
+      senderIcon: "🏦",
+      text: "Transfer received: €487.50 from MARTIN DUPONT. Reference: Invoice #4821. View details and confirm: bgl-secure-banking.com/transfer/confirm",
+      isScam: true,
+      explain: "You didn't expect any transfer! Scammers send fake 'money received' messages to make you click out of curiosity. The link leads to a fake banking page that steals your login. Your real bank app shows your actual transactions — always check there.",
+      realStory: "📊 REAL CASE: 'Unexpected transfer' phishing is a top-5 banking scam in Europe. The Chainalysis 2024 report found that banking phishing generates over $3B annually for criminal networks."
+    },
+    {
+      context: "📱 Text arrives from Mama's number...",
+      sender: "Mama 💕",
+      senderIcon: "👩‍🦳",
+      text: "Hi Mike, it's mama. I'm in trouble and I need help urgently. Can you send me €50 right now? I'll explain later. Use this link to send quickly: quick-transfer.eu/send",
+      isScam: true,
+      explain: "Even though it shows 'Mama's' number, scammers can SPOOF any phone number. Red flags: asking for money via link (not bank transfer), urgency with no details, 'I'll explain later.' ALWAYS call back on a number you know to verify.",
+      realStory: "📊 REAL CASE: The 'Hi Mum/Dad' scam cost Europeans €1.2 billion in 2024. Fraudsters use number spoofing or stolen phones. In the UK alone, Action Fraud received 33,000+ reports of this scam."
+    },
+    {
+      context: "📦 You listed a couch for sale on OLX...",
+      sender: "OLX Notification",
+      senderIcon: "📦",
+      text: "Great news! Your item 'IKEA KIVIK Sofa — €350' has been sold! The buyer has paid. To receive your money, confirm your details: olx-secure-payment.com/seller/confirm",
+      isScam: true,
+      explain: "This is YOUR scenario! The scammers scraped your real listing from OLX (title, price, everything). The fake site looks exactly like OLX but asks for your card number and CVV. They don't send you €350 — they TAKE money FROM your card.",
+      realStory: "📊 REAL CASE: OLX/marketplace payment scams are the #1 fraud type in Eastern Europe. In Poland alone, over 100,000 cases were reported in 2024. Scammers build perfect copies of OLX checkout pages within hours of listings going live."
+    },
+    {
+      context: "📧 Email from your company's IT department...",
+      sender: "IT Support - Urgent",
+      senderIcon: "🖥️",
+      text: "All employees: Our email server is being migrated today. Please re-authenticate your account within 2 hours to avoid losing access. Click here to verify: company-mailportal.com/auth",
+      isScam: true,
+      explain: "Business Email Compromise (BEC) costs companies billions. Real IT departments use internal channels, not random emails with external links. 'company-mailportal.com' is not your company's real domain. When in doubt, call IT directly.",
+      realStory: "📊 REAL CASE: FBI reports BEC losses of $2.9 billion in 2024. One company, Evolve Bank, lost 33TB of data from a single employee clicking a malicious link."
+    }
+  ],
+
+  seniors: [
+    {
+      context: "📞 Your phone rings — unknown number...",
+      sender: "Microsoft Tech Support",
+      senderIcon: "🖥️",
+      text: "Hello! This is Microsoft Windows Security. We detected a VIRUS on your computer. Your bank details may be at risk! Please don't turn off your computer. We need remote access to fix it. Press 1 to connect to a technician.",
+      isScam: true,
+      explain: "Microsoft NEVER calls you about viruses. They don't monitor individual computers. No real tech company asks for remote access through a phone call. This is one of the most common scams targeting seniors. Hang up immediately!",
+      realStory: "📊 REAL CASE: Tech support scams stole $1.46 billion in 2024 (FBI). A 93-year-old in Georgia lost his entire life savings — $109,000 — to a fake tech support caller who convinced him to withdraw cash."
+    },
+    {
+      context: "📱 Text from an unknown number...",
+      sender: "+352 621 XXX XXX",
+      senderIcon: "📱",
+      text: "Hi Grandma! It's me, your granddaughter Emma! I changed my number. I'm in trouble at the airport — my wallet was stolen and I need €200 for a taxi home. Can you send it here: quick-help.eu/send? Please don't tell Mom, she'll worry 😢",
+      isScam: true,
+      explain: "The 'grandchild emergency' scam is heartbreaking because it exploits your love. Red flags: new number, urgency, asking for money via link, 'don't tell anyone.' ALWAYS call your grandchild's real number or their parents to verify.",
+      realStory: "📊 REAL CASE: The FBI reported that grandparent scams caused $2.7 million in losses in 2024. Scammers now use AI to clone voices from social media videos — a 3-second clip is enough to fake someone's voice."
+    },
+    {
+      context: "📧 Email about your health insurance...",
+      sender: "Medicare Benefits Update",
+      senderIcon: "🏥",
+      text: "Important: Your Medicare plan is being updated for 2026. You may qualify for enhanced benefits including dental and vision. To check your eligibility, verify your Medicare number at: medicare-benefits-check.org/verify",
+      isScam: true,
+      explain: "Medicare communicates through official mail or medicare.gov — never through emails asking you to 'verify your number' on unknown websites. Your Medicare number is as valuable as your Social Security number to scammers.",
+      realStory: "📊 REAL CASE: Medicare fraud costs the US $60+ billion annually. Scammers use stolen Medicare numbers to bill for fake medical equipment and services. Victims may find their coverage limits exhausted when they actually need care."
+    },
+    {
+      context: "📱 Text message from the post office...",
+      sender: "Royal Mail Delivery",
+      senderIcon: "📮",
+      text: "You have a package awaiting delivery. A small fee of £1.50 is required for redelivery. Pay here: royalmail-delivery-fee.co.uk/pay to schedule delivery tomorrow.",
+      isScam: true,
+      explain: "The real Royal Mail website is royalmail.com — not 'royalmail-delivery-fee.co.uk'. The £1.50 fee is just to get your card details. Once they have them, they'll drain your account. Real delivery notices come with a reference number and official channels.",
+      realStory: "📊 REAL CASE: Fake delivery texts exploded in 2024 with over 59,000 complaints to the FBI. Toll and delivery scams are the fastest-growing fraud category. One victim lost £12,000 after entering card details on a fake delivery site."
+    },
+    {
+      context: "📱 Message from your neighbor...",
+      sender: "Dorothy (Neighbor)",
+      senderIcon: "👩",
+      text: "Hi Margaret! Just a reminder — book club is moved to Thursday this week instead of Wednesday. Same time, 2pm at my place. Would you mind bringing that lovely lemon cake again? 😊",
+      isScam: false,
+      explain: "This is SAFE! A known contact, a normal message about a regular activity, no links, no money, no urgency, no personal info requests. This is just your neighbor being friendly!",
+      realStory: "💡 TIP: Not every message is dangerous! The goal is to stay alert for red flags — links, urgency, money requests, and unknown senders — while still enjoying normal communication."
+    }
+  ]
+};
+
+// ===== DISTRACTION MINI-GAMES =====
+const DISTRACTIONS = [
+  {
+    type: 'drama',
+    emoji: '😱',
+    title: 'BREAKING NEWS!',
+    sub: 'A celebrity was just spotted at your local mall...',
+    bg: 'linear-gradient(135deg, #1a0a2e, #16213e)',
+    duration: 4000,
+    content: `<div style="font-size:3rem;animation:zoomPulse 0.5s infinite">📸</div>
+      <p style="font-size:0.9rem;margin:12px 0;color:#fff">OMG! Is that really them?!<br>Everyone is running to take selfies!</p>
+      <p style="font-size:0.7rem;color:rgba(255,255,255,0.5)">...while you're distracted, a new message arrives...</p>
+      <div class="distraction-timer" id="dTimer"></div>`
+  },
+  {
+    type: 'romance',
+    emoji: '💕',
+    title: 'Love Story Moment',
+    sub: 'After 5 years apart, they finally meet again...',
+    bg: 'linear-gradient(135deg, #2d1b2e, #1a1a2e)',
+    duration: 4000,
+    content: `<div style="font-size:3rem">💋</div>
+      <p style="font-size:0.85rem;margin:12px 0;color:#fff;font-style:italic">"I never stopped thinking about you..."</p>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.4)">The most romantic moment of the year!</p>
+      <div class="distraction-timer" id="dTimer"></div>
+      <p style="font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:8px">⚡ Message waiting...</p>`
+  },
+  {
+    type: 'scary',
+    emoji: '👻',
+    title: 'DID YOU HEAR THAT?!',
+    sub: 'Something moved in the dark...',
+    bg: 'linear-gradient(135deg, #0a0a0a, #1a0000)',
+    duration: 3500,
+    content: `<div style="font-size:4rem;animation:shake 0.3s infinite">😨</div>
+      <p style="font-size:1.1rem;margin:10px 0;color:#ff4757;font-weight:700">BOO!</p>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.4)">Heart racing? Good. Now check your inbox...</p>
+      <div class="distraction-timer" id="dTimer"></div>`
+  },
+  {
+    type: 'math',
+    emoji: '🧮',
+    title: 'QUICK MATH!',
+    sub: 'Solve this before time runs out!',
+    bg: 'linear-gradient(135deg, #1a1a0a, #0a1a0a)',
+    duration: 6000,
+    content: 'MATH_GAME'
+  },
+  {
+    type: 'tap',
+    emoji: '🎯',
+    title: 'TAP THE TARGETS!',
+    sub: 'How many can you catch in 5 seconds?',
+    bg: 'linear-gradient(135deg, #0a0a1a, #1a0a1a)',
+    duration: 5500,
+    content: 'TAP_GAME'
+  },
+  {
+    type: 'ad',
+    emoji: '🎁',
+    title: 'YOU WON A PRIZE!',
+    sub: 'Just kidding. But this is how ads distract you.',
+    bg: 'linear-gradient(135deg, #2e1a0a, #1a2e0a)',
+    duration: 3500,
+    content: `<div style="font-size:3rem;animation:zoomPulse 0.8s infinite">🎰</div>
+      <p style="font-size:1rem;margin:12px 0;color:#FFD60A;font-weight:700">SPIN & WIN!!!</p>
+      <p style="font-size:0.7rem;color:rgba(255,255,255,0.5)">This is what real distractions look like.<br>Now — can you still focus on the next message?</p>
+      <div class="distraction-timer" id="dTimer"></div>`
+  },
+  {
+    type: 'sad',
+    emoji: '😢',
+    title: 'A Sad Story...',
+    sub: 'She lost everything to a scam...',
+    bg: 'linear-gradient(135deg, #0a0a1a, #1a1a2e)',
+    duration: 5000,
+    content: `<div style="font-size:2.5rem">😢</div>
+      <p style="font-size:0.8rem;margin:12px 0;color:#fff;line-height:1.6;font-style:italic">"My grandmother lost her entire savings — €47,000 — to a phone scam. She was too embarrassed to tell anyone for months."</p>
+      <p style="font-size:0.7rem;color:var(--yellow);font-weight:600">This is why we play this game.</p>
+      <div class="distraction-timer" id="dTimer"></div>`
+  }
+];
+
+// ===== SCREEN MANAGEMENT =====
+let activeScreen = 'screenWelcome';
+function showScreen(id) {
+  document.getElementById(activeScreen).classList.remove('active');
+  document.getElementById(activeScreen).classList.add('exit');
+  setTimeout(() => {
+    document.getElementById(activeScreen).classList.remove('exit');
+  }, 500);
+  document.getElementById(id).classList.add('active');
+  activeScreen = id;
+}
+
+// ===== GAME LOGIC =====
+function startGame(age) {
+  currentAge = age;
+  currentRound = 0;
+  score = 0;
+  streak = 0;
+  correct = 0;
+  wrong = 0;
+  distractionPlayed = false;
+  scenarios = [...SCENARIOS[age]];
+  // Shuffle
+  for (let i = scenarios.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [scenarios[i], scenarios[j]] = [scenarios[j], scenarios[i]];
+  }
+  showScreen('screenGame');
+  loadRound();
+}
+
+function loadRound() {
+  if (currentRound >= scenarios.length) {
+    endGame();
+    return;
+  }
+
+  const s = scenarios[currentRound];
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('roundDisplay').textContent = currentRound + 1;
+  document.getElementById('streakDisplay').textContent = streak > 1 ? `🔥 ${streak} streak` : '';
+
+  const container = document.getElementById('msgContainer');
+  container.innerHTML = `
+    <div class="msg-context">${s.context}</div>
+    <div class="msg-bubble">
+      <div class="msg-sender">
+        <div class="msg-sender-icon">${s.senderIcon}</div>
+        ${s.sender}
+      </div>
+      <div class="msg-text">${s.text}</div>
+      <div class="msg-time">${getRandomTime()}</div>
+    </div>
+  `;
+
+  document.getElementById('actionBtns').style.display = 'flex';
+  document.getElementById('resultOverlay').classList.remove('active', 'correct', 'wrong');
+
+  // Show notification
+  showNotification(s.senderIcon, s.sender, s.text.substring(0, 40) + '...');
+}
+
+function answer(isSafe) {
+  const s = scenarios[currentRound];
+  const playerSaysScam = !isSafe;
+  const isCorrect = (s.isScam === playerSaysScam) || (!s.isScam === isSafe);
+
+  document.getElementById('actionBtns').style.display = 'none';
+
+  const overlay = document.getElementById('resultOverlay');
+  overlay.classList.add('active');
+
+  if (isCorrect) {
+    score += 10 + (streak * 2);
+    streak++;
+    correct++;
+    overlay.classList.add('correct');
+    document.getElementById('resultEmoji').textContent = ['🎯', '🕵️', '✅', '💪', '🧠'][Math.floor(Math.random() * 5)];
+    document.getElementById('resultTitle').textContent = s.isScam ? 'SCAM CAUGHT!' : 'CORRECTLY IDENTIFIED!';
+  } else {
+    streak = 0;
+    wrong++;
+    overlay.classList.add('wrong');
+    document.getElementById('phone').classList.add('shake');
+    setTimeout(() => document.getElementById('phone').classList.remove('shake'), 400);
+    document.getElementById('resultEmoji').textContent = s.isScam ? '😱' : '🤦';
+    document.getElementById('resultTitle').textContent = s.isScam ? 'YOU GOT SCAMMED!' : 'FALSE ALARM!';
+  }
+
+  document.getElementById('resultExplain').textContent = s.explain;
+  document.getElementById('resultStory').textContent = s.realStory;
+  document.getElementById('scoreDisplay').textContent = score;
+  document.getElementById('streakDisplay').textContent = streak > 1 ? `🔥 ${streak} streak` : '';
+
+  // Decide if next round shows distraction
+  if (currentRound === 1 || currentRound === 3) {
+    document.getElementById('btnNext').textContent = 'Continue →';
+  } else {
+    document.getElementById('btnNext').textContent = 'Next →';
+  }
+}
+
+function nextRound() {
+  document.getElementById('resultOverlay').classList.remove('active', 'correct', 'wrong');
+  currentRound++;
+
+  if (currentRound >= scenarios.length) {
+    endGame();
+    return;
+  }
+
+  // Show distraction after round 2 and round 4
+  if (currentRound === 2 || currentRound === 4) {
+    showDistraction(() => loadRound());
+  } else {
+    loadRound();
+  }
+}
+
+// ===== DISTRACTIONS =====
+function showDistraction(callback) {
+  const d = DISTRACTIONS[Math.floor(Math.random() * DISTRACTIONS.length)];
+  const overlay = document.getElementById('distractionOverlay');
+  const bg = document.getElementById('distractionBg');
+  const content = document.getElementById('distractionContent');
+
+  bg.style.background = d.bg;
+  overlay.classList.add('active');
+
+  if (d.content === 'MATH_GAME') {
+    const a = Math.floor(Math.random() * 20) + 5;
+    const b = Math.floor(Math.random() * 20) + 5;
+    const answer = a + b;
+    content.innerHTML = `
+      <div class="distraction-emoji">${d.emoji}</div>
+      <div class="distraction-title">${d.title}</div>
+      <div class="distraction-sub">${d.sub}</div>
+      <div style="font-size:1.8rem;font-family:var(--font-display);font-weight:800;margin:10px 0;color:var(--yellow)">${a} + ${b} = ?</div>
+      <input type="number" class="math-input" id="mathInput" autofocus>
+      <div class="distraction-timer" id="dTimer"></div>
+      <p style="font-size:0.6rem;color:rgba(255,255,255,0.3);margin-top:8px">Solve it... then check your inbox!</p>
+    `;
+    setTimeout(() => {
+      const input = document.getElementById('mathInput');
+      if (input) input.focus();
+    }, 300);
+  } else if (d.content === 'TAP_GAME') {
+    let tapCount = 0;
+    content.innerHTML = `
+      <div class="distraction-emoji">${d.emoji}</div>
+      <div class="distraction-title">${d.title}</div>
+      <div class="distraction-sub">${d.sub}</div>
+      <div class="tap-arena" id="tapArena"></div>
+      <div class="tap-score">Tapped: <span id="tapCount">0</span></div>
+    `;
+    const arena = document.getElementById('tapArena');
+    function spawnTarget() {
+      const t = document.createElement('div');
+      t.className = 'tap-target';
+      t.textContent = ['🎯','⭐','💎','🔥'][Math.floor(Math.random()*4)];
+      t.style.left = Math.random() * (arena.offsetWidth - 60) + 'px';
+      t.style.top = Math.random() * (arena.offsetHeight - 60) + 'px';
+      t.onclick = () => {
+        tapCount++;
+        document.getElementById('tapCount').textContent = tapCount;
+        t.remove();
+        spawnTarget();
+      };
+      arena.appendChild(t);
+      setTimeout(() => { if (t.parentNode) t.remove(); spawnTarget(); }, 1200);
+    }
+    spawnTarget();
+    spawnTarget();
+  } else {
+    content.innerHTML = `
+      <div class="distraction-emoji">${d.emoji}</div>
+      <div class="distraction-title">${d.title}</div>
+      <div class="distraction-sub">${d.sub}</div>
+      ${d.content}
+    `;
+  }
+
+  // Countdown timer
+  let remaining = Math.ceil(d.duration / 1000);
+  const timerEl = document.getElementById('dTimer');
+  if (timerEl) timerEl.textContent = remaining + 's';
+  const timerInt = setInterval(() => {
+    remaining--;
+    const te = document.getElementById('dTimer');
+    if (te) te.textContent = remaining > 0 ? remaining + 's' : 'GO!';
+    if (remaining <= 0) clearInterval(timerInt);
+  }, 1000);
+
+  setTimeout(() => {
+    overlay.classList.remove('active');
+    content.innerHTML = '';
+    clearInterval(timerInt);
+    callback();
+  }, d.duration);
+}
+
+// ===== GAME OVER =====
+function endGame() {
+  const pct = Math.round((correct / scenarios.length) * 100);
+  let emoji, title, subtitle, rank;
+
+  if (pct >= 90) {
+    emoji = '🏆'; title = 'MASTER DETECTIVE!'; subtitle = 'Almost nothing gets past you.'; rank = '🕵️ Master Detective';
+  } else if (pct >= 70) {
+    emoji = '⭐'; title = 'GREAT WORK!'; subtitle = 'You\'re getting sharper every day.'; rank = '🔍 Senior Agent';
+  } else if (pct >= 50) {
+    emoji = '💪'; title = 'GETTING THERE!'; subtitle = 'Keep training — scammers are evolving too.'; rank = '📋 Junior Agent';
+  } else {
+    emoji = '😰'; title = 'SCAMMERS WON THIS ROUND'; subtitle = 'But now you know their tricks. Try again!'; rank = '🆕 Rookie';
+  }
+
+  document.getElementById('goEmoji').textContent = emoji;
+  document.getElementById('goTitle').textContent = title;
+  document.getElementById('goSubtitle').textContent = subtitle;
+  document.getElementById('goScore').textContent = score;
+  document.getElementById('goCorrect').textContent = correct;
+  document.getElementById('goWrong').textContent = wrong;
+  document.getElementById('goRank').textContent = rank;
+
+  showScreen('screenGameOver');
+}
+
+// ===== HELPERS =====
+function getRandomTime() {
+  const h = Math.floor(Math.random() * 12) + 1;
+  const m = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+  return `${h}:${m} ${Math.random() > 0.5 ? 'PM' : 'AM'}`;
+}
+
+function showNotification(icon, app, text) {
+  const n = document.createElement('div');
+  n.className = 'notification';
+  n.innerHTML = `
+    <div class="notif-icon">${icon}</div>
+    <div>
+      <div class="notif-app">${app}</div>
+      <div class="notif-text">${text}</div>
+    </div>
+  `;
+  document.getElementById('phoneContent').appendChild(n);
+  setTimeout(() => n.remove(), 2600);
+}
+
+function shareResults() {
+  const text = `🕵️ SMS Detective Score: ${score} points!\n✅ Caught ${correct} scams\n❌ Missed ${wrong}\nCan you beat me? Play free at SMSLabs.com\n#SMSDetective #ScamAwareness`;
+  if (navigator.share) {
+    navigator.share({ text });
+  } else {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Results copied to clipboard!');
+    });
+  }
+}
+</script>
+
+<style>
+.ad-overlay{position:fixed;inset:0;z-index:100;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px)}
+.ad-overlay.active{display:flex}
+.ad-popup{width:90%;max-width:500px;border-radius:20px;overflow:hidden;position:relative;animation:adBounce 0.4s cubic-bezier(0.34,1.56,0.64,1);box-shadow:0 30px 80px rgba(0,0,0,0.6)}
+@keyframes adBounce{from{transform:scale(0.5) translateY(40px);opacity:0}to{transform:scale(1) translateY(0);opacity:1}}
+.ad-close{position:absolute;top:10px;right:10px;width:28px;height:28px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.2);border-radius:50%;color:rgba(255,255,255,0.3);font-size:0.7rem;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);z-index:5}
+.ad-close.disabled{opacity:0.3;cursor:not-allowed}
+.ad-close:not(.disabled):hover{background:#FF4757;color:white}
+.ad-prize{background:linear-gradient(135deg,#ff6b35,#ff2e63,#d63384);padding:36px 24px;text-align:center}
+.ad-prize h2{font-family:var(--font-display);font-weight:800;font-size:1.6rem;margin:12px 0 6px;color:white}
+.ad-prize p{color:rgba(255,255,255,0.85);font-size:0.9rem;margin-bottom:16px}
+.ad-big-emoji{font-size:4rem;animation:adSpin 2s linear infinite}
+@keyframes adSpin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+.fake-btn{display:inline-block;background:var(--yellow);color:var(--black);padding:12px 32px;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;animation:adPulse 1s infinite;border:none;font-family:var(--font-body)}
+@keyframes adPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05);box-shadow:0 0 30px rgba(255,214,10,0.5)}}
+.ad-virus{background:linear-gradient(135deg,#1a1a2e,#16213e);border:2px solid #FF4757;padding:30px 24px;text-align:center}
+.ad-virus h2{font-family:var(--font-display);color:#FF4757;font-size:1.4rem;margin:10px 0 8px}
+.ad-virus p{color:rgba(255,255,255,0.6);font-size:0.85rem;margin-bottom:14px}
+.ad-virus .fake-btn{background:#FF4757;color:white}
+.ad-virus .fake-progress{width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:6px;margin:14px 0;overflow:hidden}
+.ad-virus .fake-progress-bar{height:100%;background:#FF4757;border-radius:6px;animation:fakeLoad 3s linear}
+@keyframes fakeLoad{from{width:0}to{width:78%}}
+.ad-countdown{font-family:var(--font-mono);font-size:0.65rem;color:rgba(255,255,255,0.3);text-align:center;margin-top:14px;padding:0 20px 14px}
+</style>
+
+<div class="ad-overlay" id="adOverlay">
+  <div class="ad-popup">
+    <div class="ad-close disabled" id="adClose" onclick="closeAd()">✕</div>
+    <div id="adBody"></div>
+    <div class="ad-countdown" id="adCountdown"></div>
+  </div>
+</div>
+
+<script>
+// FAKE AD SYSTEM
+const FAKE_ADS=[
+{dur:7000,html:'<div class="ad-prize"><div class="ad-big-emoji">🎰</div><h2>🎉 YOU\'RE THE 1,000,000th VISITOR!</h2><p>Click to claim your FREE Samsung Galaxy S25!</p><button class="fake-btn" onclick="fakeAdClick()">CLAIM MY PRIZE →</button><p style="font-size:0.55rem;color:rgba(255,255,255,0.35);margin-top:12px">*Training simulation of a real scam ad</p></div>'},
+{dur:8000,html:'<div class="ad-virus"><div style="font-size:3rem;animation:shake 0.3s infinite">⚠️</div><h2>WARNING: 3 Viruses Detected!</h2><p>Your device is 28.1% DAMAGED!<br>Immediate action required!</p><div class="fake-progress"><div class="fake-progress-bar"></div></div><button class="fake-btn" onclick="fakeAdClick()">REMOVE VIRUSES NOW</button><p style="font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:10px">*This is how real scam popups look</p></div>'},
+{dur:7000,html:'<div class="ad-prize" style="background:linear-gradient(135deg,#1a5276,#148f77)"><div class="ad-big-emoji">📱</div><h2>CONGRATULATIONS!</h2><p>Your IP address was selected!<br>You won an iPhone 16 Pro Max!</p><button class="fake-btn" onclick="fakeAdClick()">CLAIM NOW ⏰</button><p style="font-size:0.55rem;color:rgba(255,255,255,0.3);margin-top:10px">*Nobody wins prizes from IP addresses</p></div>'}
+];
+let adCallback=null;
+
+function showFakeAd(callback) {
+  adCallback=callback;
+  const ad=FAKE_ADS[Math.floor(Math.random()*FAKE_ADS.length)];
+  document.getElementById('adBody').innerHTML=ad.html;
+  document.getElementById('adClose').classList.add('disabled');
+  document.getElementById('adOverlay').classList.add('active');
+  let r=3;
+  const cd=document.getElementById('adCountdown');
+  cd.textContent='Close in '+r+'s...';
+  const ci=setInterval(()=>{r--;if(r>0){cd.textContent='Close in '+r+'s...';}else{clearInterval(ci);cd.textContent='You can close this now';document.getElementById('adClose').classList.remove('disabled');}},1000);
+  setTimeout(()=>{closeAd();},ad.dur);
+}
+function fakeAdClick(){document.getElementById('adCountdown').innerHTML='<span style="color:#FF4757;font-weight:600">⚠️ In real life this would compromise your device!</span>';}
+function closeAd(){document.getElementById('adOverlay').classList.remove('active');if(adCallback){adCallback();adCallback=null;}}
+
+// BACK BUTTON
+let screenHist=['screenWelcome'];
+const origShowScreen=showScreen;
+showScreen=function(id){
+  origShowScreen(id);
+  screenHist.push(id);
+  updateBackBtn();
+};
+function goBack(){
+  if(screenHist.length<=1)return;
+  const curr=screenHist.pop();
+  document.getElementById(curr).classList.remove('active');
+  const prev=screenHist[screenHist.length-1];
+  document.getElementById(prev).classList.add('active');
+  activeScreen=prev;
+  updateBackBtn();
+}
+function updateBackBtn(){
+  const b=document.getElementById('btnBack');
+  if(screenHist.length>1 && activeScreen!=='screenGame'){b.classList.add('show');}else{b.classList.remove('show');}
+}
+
+// OVERRIDE nextRound to use fake ads
+const origNextRound=nextRound;
+nextRound=function(){
+  document.getElementById('resultOverlay').classList.remove('active','correct','wrong');
+  currentRound++;
+  if(currentRound>=scenarios.length){endGame();return;}
+  if(currentRound===2||currentRound===4){
+    showFakeAd(()=>loadRound());
+  } else {
+    loadRound();
+  }
+};
+</script>
+</body>
+</html>

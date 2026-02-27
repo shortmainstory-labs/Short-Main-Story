@@ -1,0 +1,8 @@
+# Netlify redirects
+# Clean URLs
+/games      /index.html#games      200
+/tools      /index.html#tools      200
+/schools    /index.html#schools    200
+
+# Old SMS Labs URLs (in case anyone has them)
+/sms-labs-landing.html  /  301

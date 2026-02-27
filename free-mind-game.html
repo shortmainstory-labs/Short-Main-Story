@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Mind — Understand. Choose. Be Free.</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800;900&family=Caveat:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --free:#7C4DFF;--free2:rgba(124,77,255,0.06);--free3:rgba(124,77,255,0.12);
+  --warm:#FF6D00;--warm2:rgba(255,109,0,0.06);--warm3:rgba(255,109,0,0.12);
+  --life:#00C853;--life2:rgba(0,200,83,0.06);--life3:rgba(0,200,83,0.12);
+  --alert:#FF1744;--alert2:rgba(255,23,68,0.06);
+  --sky:#00B0FF;--sky2:rgba(0,176,255,0.06);
+  --gold:#FFD740;
+  --bg:#FAFBFF;--bg2:#F3F0FF;--bg3:#FFF8E1;
+  --card:#FFFFFF;--card2:#F8F6FF;
+  --text:#2D3748;--dim:#718096;--muted:#A0AEC0;
+  --border:rgba(124,77,255,0.08);
+  --shadow:rgba(0,0,0,0.04);
+  --font:'Nunito',sans-serif;--font-hand:'Caveat',cursive;--font-mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;z-index:0;pointer-events:none;
+  background:radial-gradient(ellipse at 20% 10%,rgba(124,77,255,0.04) 0%,transparent 50%),
+  radial-gradient(ellipse at 80% 90%,rgba(0,200,83,0.03) 0%,transparent 50%)}
+.app{position:relative;z-index:1;max-width:700px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;
+  background:rgba(250,251,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50}
+.topbar-title{font-weight:900;font-size:1.1rem;color:var(--free)}
+.topbar-title span{color:var(--text)}
+.btn-back{background:white;border:1px solid var(--border);color:var(--dim);font-size:0.8rem;font-weight:600;
+  padding:6px 14px;border-radius:10px;cursor:pointer;transition:all 0.2s;display:none}
+.btn-back:hover{border-color:var(--free);color:var(--free)}
+.btn-back.show{display:block}
+.topbar-badge{font-family:var(--font-mono);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.1em;
+  color:var(--life);background:var(--life2);border:1px solid rgba(0,200,83,0.12);padding:3px 8px;border-radius:6px}
+
+.screen{display:none;flex-direction:column;padding:20px;animation:fadeUp 0.5s ease;flex:1}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* WELCOME */
+.welcome{text-align:center;padding-top:24px}
+.welcome-chain{font-size:4rem;margin-bottom:4px;position:relative;display:inline-block}
+.welcome-chain::after{content:'✨';position:absolute;top:-10px;right:-20px;font-size:1.5rem;animation:sparkle 1.5s ease-in-out infinite}
+@keyframes sparkle{0%,100%{opacity:1;transform:rotate(0deg)}50%{opacity:0.5;transform:rotate(20deg)}}
+.welcome h1{font-weight:900;font-size:2rem;line-height:1.3;margin-bottom:6px}
+.welcome h1 em{color:var(--free);font-style:normal}
+.welcome h1 .hand{font-family:var(--font-hand);font-size:2.4rem;color:var(--warm)}
+.welcome>p{color:var(--dim);font-size:0.92rem;max-width:480px;margin:0 auto 20px;line-height:1.7}
+
+.kind-note{background:var(--bg3);border:1.5px solid rgba(255,109,0,0.12);border-radius:16px;
+  padding:16px 18px;text-align:left;max-width:500px;margin:0 auto 20px}
+.kind-note h4{display:flex;align-items:center;gap:8px;font-size:0.85rem;color:var(--warm);margin-bottom:6px}
+.kind-note p{font-size:0.78rem;color:var(--dim);line-height:1.7}
+
+.topic-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;margin:0 auto 20px}
+.topic-card{background:white;border:1.5px solid var(--border);border-radius:16px;
+  padding:18px 14px;text-align:center;cursor:pointer;transition:all 0.3s;
+  box-shadow:0 2px 12px var(--shadow)}
+.topic-card:hover{transform:translateY(-4px);border-color:var(--free);box-shadow:0 8px 25px rgba(124,77,255,0.08)}
+.topic-card:active{transform:scale(0.97)}
+.topic-card.locked{opacity:0.4;cursor:not-allowed}
+.topic-card.locked:hover{transform:none;border-color:var(--border)}
+.topic-emoji{font-size:2.2rem;margin-bottom:6px}
+.topic-name{font-weight:800;font-size:0.95rem}
+.topic-desc{font-size:0.65rem;color:var(--dim);margin-top:3px}
+.topic-lock{font-family:var(--font-mono);font-size:0.5rem;color:var(--muted);margin-top:4px}
+
+/* GAME */
+.hud{display:flex;justify-content:space-between;align-items:center;padding:8px 0;margin-bottom:8px;
+  border-bottom:1px solid var(--border)}
+.hud-free{font-weight:800;color:var(--free);font-size:0.9rem}
+.hud-round{font-family:var(--font-mono);font-size:0.6rem;color:var(--muted)}
+.prog-track{width:100%;height:5px;background:rgba(124,77,255,0.06);border-radius:5px;margin-bottom:16px;overflow:hidden}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--free),var(--life));border-radius:5px;transition:width 0.5s}
+
+.scene-card{background:white;border:1px solid var(--border);border-radius:18px;padding:22px;
+  margin-bottom:14px;box-shadow:0 2px 15px var(--shadow)}
+.scene-badge{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-mono);font-size:0.5rem;
+  text-transform:uppercase;letter-spacing:0.08em;padding:4px 10px;border-radius:8px;margin-bottom:10px}
+.scene-badge.trick{background:var(--alert2);color:var(--alert)}
+.scene-badge.understand{background:var(--sky2);color:var(--sky)}
+.scene-badge.power{background:var(--life2);color:var(--life)}
+.scene-badge.think{background:var(--free2);color:var(--free)}
+
+.scene-text{font-size:0.92rem;color:var(--text);line-height:1.75;margin-bottom:12px}
+.scene-text .hl{background:linear-gradient(transparent 60%,rgba(124,77,255,0.15) 60%);font-weight:700}
+.scene-text .warm{color:var(--warm);font-weight:700}
+
+.scene-quote{background:var(--bg2);border-left:3px solid var(--free);border-radius:0 12px 12px 0;
+  padding:14px 16px;margin:12px 0;font-size:0.88rem;line-height:1.7;font-style:italic;color:var(--dim)}
+.scene-quote .src{font-style:normal;font-weight:700;display:block;margin-bottom:4px;color:var(--free);font-size:0.75rem}
+
+.brain-box{background:linear-gradient(135deg,rgba(124,77,255,0.04),rgba(0,200,83,0.04));
+  border:1.5px solid var(--free3);border-radius:14px;padding:16px;margin:12px 0;text-align:center}
+.brain-box h4{font-weight:800;font-size:0.9rem;color:var(--free);margin-bottom:6px}
+.brain-box p{font-size:0.8rem;color:var(--dim);line-height:1.65}
+.brain-visual{display:flex;justify-content:center;gap:8px;margin:10px 0;flex-wrap:wrap}
+.brain-step{background:white;border:1px solid var(--border);border-radius:10px;padding:8px 12px;
+  font-size:0.7rem;font-weight:600;display:flex;align-items:center;gap:4px}
+.brain-step .arrow{color:var(--free)}
+
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.btn-choice{background:white;border:1.5px solid var(--border);border-radius:14px;padding:15px 16px;
+  font-size:0.9rem;font-weight:600;color:var(--text);cursor:pointer;transition:all 0.25s;
+  text-align:left;display:flex;align-items:center;gap:10px;box-shadow:0 2px 8px var(--shadow)}
+.btn-choice:hover{border-color:var(--free);transform:translateX(4px)}
+.btn-choice:active{transform:scale(0.98)}
+.btn-choice .ch-e{font-size:1.2rem;flex-shrink:0}
+.btn-choice.correct-r{border-color:var(--life);background:var(--life2)}
+.btn-choice.wrong-r{border-color:var(--alert);background:var(--alert2);opacity:0.5}
+
+.result-card{border-radius:18px;padding:22px;text-align:center;margin-bottom:12px}
+.result-card.win{background:linear-gradient(135deg,rgba(0,200,83,0.06),rgba(124,77,255,0.03));border:1.5px solid rgba(0,200,83,0.15)}
+.result-card.lose{background:linear-gradient(135deg,rgba(255,23,68,0.04),transparent);border:1.5px solid rgba(255,23,68,0.1)}
+.result-emoji{font-size:2.5rem;margin-bottom:6px}
+.result-title{font-weight:900;font-size:1.2rem}
+.result-card.win .result-title{color:var(--life)} .result-card.lose .result-title{color:var(--alert)}
+
+.teach-card{background:white;border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:10px;
+  box-shadow:0 2px 10px var(--shadow)}
+.teach-header{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.teach-header span:first-child{font-size:1rem}
+.teach-header span:last-child{font-weight:800;font-size:0.85rem;color:var(--free)}
+.teach-body{font-size:0.82rem;color:var(--dim);line-height:1.75}
+.teach-body strong{color:var(--text)}
+
+.challenge-box{background:var(--bg3);border:2px dashed rgba(255,109,0,0.2);border-radius:16px;
+  padding:18px;text-align:center;margin-bottom:12px}
+.challenge-box h4{font-weight:800;font-size:1rem;color:var(--warm);margin-bottom:6px}
+.challenge-box p{font-size:0.8rem;color:var(--dim);line-height:1.7}
+.challenge-timer{font-family:var(--font-hand);font-size:1.8rem;color:var(--free);margin:8px 0}
+
+.btn-next{display:block;width:100%;background:var(--free);color:white;border:none;
+  border-radius:14px;padding:14px;font-weight:800;font-size:1rem;cursor:pointer;transition:all 0.25s;
+  box-shadow:0 4px 18px rgba(124,77,255,0.2)}
+.btn-next:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(124,77,255,0.25)}
+
+/* END SCREEN */
+.end-center{text-align:center;padding:20px 0}
+.end-icon{font-size:4rem;margin-bottom:8px}
+.end-title{font-weight:900;font-size:1.7rem;margin-bottom:4px}
+.end-sub{font-size:0.92rem;color:var(--dim);margin-bottom:20px;max-width:400px;margin-left:auto;margin-right:auto}
+.end-card{background:white;border:1.5px solid var(--border);border-radius:18px;padding:22px;max-width:380px;
+  margin:0 auto 16px;box-shadow:0 4px 20px var(--shadow)}
+.end-score{font-weight:900;font-size:3rem;color:var(--free)}
+.end-label{font-family:var(--font-mono);font-size:0.5rem;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em}
+.end-stats{display:flex;gap:10px;margin-top:14px}
+.end-stat{flex:1;background:var(--bg);border-radius:10px;padding:10px;text-align:center}
+.end-stat-n{font-weight:800;font-size:1.3rem}
+.end-stat-n.g{color:var(--life)} .end-stat-n.r{color:var(--alert)}
+.end-stat-l{font-size:0.5rem;color:var(--muted);font-family:var(--font-mono)}
+.end-pledge{background:var(--bg2);border:1.5px solid var(--free3);border-radius:16px;padding:18px;
+  max-width:400px;margin:16px auto;text-align:center}
+.end-pledge h4{font-family:var(--font-hand);font-size:1.6rem;color:var(--free);margin-bottom:6px}
+.end-pledge p{font-size:0.78rem;color:var(--dim);line-height:1.7}
+.end-btns{display:flex;gap:10px;max-width:380px;margin:16px auto 0}
+.end-btns button{flex:1;padding:12px;border-radius:12px;font-weight:800;font-size:0.9rem;cursor:pointer;
+  transition:all 0.2s;border:none}
+.end-btns button:hover{transform:translateY(-2px)}
+.btn-end-menu{background:var(--free);color:white}
+.btn-end-share{background:white;color:var(--text);border:1px solid var(--border)!important}
+
+@keyframes screenShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-4px)}40%{transform:translateX(4px)}60%{transform:translateX(-2px)}80%{transform:translateX(2px)}}
+.shake{animation:screenShake 0.4s ease}
+@media(max-width:500px){.screen{padding:14px}.welcome h1{font-size:1.6rem}.topic-grid{gap:8px}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+<div class="topbar">
+  <button class="btn-back" id="btnBack" onclick="goBack()">← Back</button>
+  <div class="topbar-title"><span>Free</span> Mind</div>
+  <div class="topbar-badge">by SMS Labs</div>
+</div>
+
+<!-- WELCOME -->
+<div class="screen active" id="scrWelcome">
+  <div class="welcome">
+    <div class="welcome-chain">🧠</div>
+    <h1>See the <em>Tricks</em>.<br>Make <span class="hand">Your Own</span> Choices.</h1>
+    <p>Every addiction uses the same 5 tricks. Once you see them, you can't unsee them. That's freedom.</p>
+
+    <div class="kind-note">
+      <h4>❤️ A Gentle Note</h4>
+      <p>This game doesn't judge anyone. We ALL have habits — some helpful, some not. The goal isn't to feel bad about ourselves. It's to <strong>understand HOW things hook us</strong> so we can <strong>choose freely</strong>. Parents, play this together with your kids. You might learn something about your own habits too. That's brave, not weak.</p>
+    </div>
+
+    <div class="topic-grid" id="topicGrid"></div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="scrGame">
+  <div class="hud">
+    <div class="hud-free">🧠 Freedom: <span id="freeScore">0</span></div>
+    <div class="hud-round">Insight <span id="rN">1</span>/<span id="rT">6</span></div>
+  </div>
+  <div class="prog-track"><div class="prog-bar" id="pBar" style="width:17%"></div></div>
+  <div id="gameArea"></div>
+</div>
+
+<!-- END -->
+<div class="screen" id="scrEnd">
+  <div class="end-center">
+    <div class="end-icon" id="eIcon">🦋</div>
+    <div class="end-title" id="eTitle"></div>
+    <div class="end-sub" id="eSub"></div>
+    <div class="end-card">
+      <div class="end-label">Freedom Score</div>
+      <div class="end-score" id="eScore">0</div>
+      <div class="end-stats">
+        <div class="end-stat"><div class="end-stat-n g" id="eRight">0</div><div class="end-stat-l">Understood</div></div>
+        <div class="end-stat"><div class="end-stat-n r" id="eWrong">0</div><div class="end-stat-l">Learning</div></div>
+      </div>
+    </div>
+    <div class="end-pledge">
+      <h4>My Freedom Pledge</h4>
+      <p>I understand the tricks used to hook me.<br>I choose what I give my time and attention to.<br>I am stronger than any algorithm.<br>I am free.</p>
+    </div>
+    <div class="end-btns">
+      <button class="btn-end-menu" onclick="showScreen('scrWelcome')">More Topics</button>
+      <button class="btn-end-share" onclick="shareR()">Share 📤</button>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const TOPICS=[
+{
+  id:'social',emoji:'📱',name:'Social Media',desc:'How apps keep you scrolling',locked:false,
+  scenarios:[
+    {
+      badge:'trick',badgeText:'🎰 THE SLOT MACHINE',
+      scene:'Every time you open Instagram or TikTok and <span class="hl">pull down to refresh</span>, something different appears. Sometimes it\'s amazing content. Sometimes it\'s boring. You never know what you\'ll get.',
+      quote:{src:'🧪 Stanford University Research',text:'Your brain doesn\'t get the biggest dopamine hit from seeing a great post. It gets the biggest hit from the UNCERTAINTY of whether the next post will be great. This is the exact same trick slot machines use.'},
+      brain:{title:'How This Hooks You',desc:'The "pull to refresh" is designed like a slot machine lever:',
+        steps:['Pull down ↓','Anticipation 🧠','Random reward 🎰','Dopamine! 💥','Pull again...']},
+      choices:[
+        {e:'🎰',text:'The "pull to refresh" uses gambling psychology — uncertainty is more addictive than guaranteed rewards',correct:true},
+        {e:'📱',text:'It\'s just loading new content, there\'s no trick',correct:false},
+        {e:'🤷',text:'I refresh because I\'m bored, not because of any trick',correct:false}
+      ],
+      teach:'<strong>Infinite scroll + pull to refresh = slot machine.</strong> Social media apps are designed by teams of psychologists to maximize the time you spend. The "variable reward schedule" (sometimes great, sometimes boring) is the most addictive pattern in psychology. Casinos use it. Now your phone does too.',
+      challenge:{title:'🔬 Family Experiment!',text:'<strong>Try this together:</strong> Set a timer for 2 minutes. Open TikTok or Instagram. Count how many times you feel the urge to keep scrolling past the 2 minutes. That urge IS the dopamine loop. Recognizing it is the first step to controlling it.'}
+    },
+    {
+      badge:'trick',badgeText:'❤️ THE LIKE TRAP',
+      scene:'You posted a photo an hour ago. You\'ve checked your phone <span class="hl">14 times</span> to see how many likes it got. When you see a new like, you feel good for about 3 seconds. Then you check again.',
+      quote:{src:'📊 Research Data',text:'The average teen checks social media once every 8 minutes while awake. 70% of teens report feeling anxious when they can\'t check their notifications. The notification system is designed to create this anxiety.'},
+      brain:{title:'The Approval Loop',desc:'Here\'s what happens in your brain:',
+        steps:['Post photo 📸','Wait for likes ⏳','Check... check... 👀','Like! → 3 sec joy 💥','Need more... 🔄']},
+      choices:[
+        {e:'🧠',text:'Likes trigger a dopamine micro-dose — just enough to make you crave MORE, never enough to feel satisfied',correct:true},
+        {e:'❤️',text:'Likes are just friends showing they care about my post',correct:false},
+        {e:'📱',text:'I don\'t really care about likes that much',correct:false}
+      ],
+      teach:'<strong>Likes are designed to be unsatisfying.</strong> They give you just enough dopamine to want more, but never enough to feel complete. This is why getting 50 likes doesn\'t feel "enough" — you always want more. Instagram knows this. They tested hiding like counts because even THEY knew it was harmful. Your worth is not a number.',
+      challenge:{title:'💪 The 24-Hour Challenge',text:'<strong>Try this:</strong> Post something and then DON\'T check it for 24 hours. Notice the urge to check. That pull you feel? That\'s the dependency talking. Every time you resist, you\'re building your freedom muscle.'}
+    },
+    {
+      badge:'understand',badgeText:'👻 FOMO — Fear of Missing Out',
+      scene:'Your friends are all on Snapchat sharing stories from a party. You weren\'t invited. You\'re watching everyone\'s stories, feeling <span class="hl">left out and anxious</span>. The more you watch, the worse you feel. But you can\'t stop watching.',
+      quote:{src:'🧪 Psychology Research',text:'FOMO is not a character flaw — it\'s a biological response. Humans evolved to fear exclusion from the group because, thousands of years ago, being alone meant death. Social media hijacks this ancient survival instinct.'},
+      brain:null,
+      choices:[
+        {e:'🧬',text:'FOMO exploits our ancient survival instinct — social media makes it 1000x worse by showing us everything we\'re "missing"',correct:true},
+        {e:'😔',text:'I just need to get invited to more things and I\'ll feel better',correct:false},
+        {e:'📵',text:'FOMO is just a buzzword, it\'s not real',correct:false}
+      ],
+      teach:'<strong>What you see on social media is a highlight reel, not real life.</strong> Nobody posts their boring Tuesday. Your friend at that "amazing" party was probably on their phone half the time watching YOUR stories and feeling FOMO about YOUR life. FOMO is a loop where everyone compares their behind-the-scenes to everyone else\'s highlight reel.',
+      challenge:{title:'📝 Reality Check Exercise',text:'<strong>Together:</strong> Think of the last 3 things you posted on social media. Were they your BEST moments or your REAL moments? Now think about this: everyone else is doing the same thing. The "perfect life" you\'re comparing yourself to doesn\'t exist.'}
+    },
+    {
+      badge:'trick',badgeText:'🔴 THE NOTIFICATION TRAP',
+      scene:'Your phone buzzes. Red notification badge: <span class="hl">you have 3 new notifications</span>. Your hand reaches for the phone before your brain even decides to pick it up. It\'s automatic. You didn\'t choose to check — your body just did it.',
+      quote:{src:'📱 App Design Internal Docs',text:'Red was chosen for notifications because it triggers urgency in the human brain. The number badge creates "information gap" — you MUST know what\'s there. Apps batch notifications to pull you back at optimal times when you\'re most likely to stay.'},
+      brain:{title:'The Notification Hijack',desc:'Your phone is training you like a dog with treats:',
+        steps:['Buzz! 🔴','Hand moves 🤚','Check phone 👀','Random reward 🎰','Repeat 100x daily']},
+      choices:[
+        {e:'🔴',text:'Notifications are engineered to create automatic behavior — red color + number = irresistible urge to check',correct:true},
+        {e:'📱',text:'Notifications just help me stay connected with friends',correct:false},
+        {e:'🤷',text:'I could stop checking anytime if I wanted',correct:false}
+      ],
+      teach:'<strong>The average person gets 80+ notifications per day</strong> and checks their phone 96 times. That\'s once every 10 minutes. The red color creates urgency. The number creates an "information gap" your brain can\'t ignore. This is not accidental — notification systems are designed by behavioral psychologists.',
+      challenge:{title:'🔇 Take Control NOW',text:'<strong>Do this right now together:</strong><br>1. Go to Settings → Notifications<br>2. Turn OFF notifications for social media apps<br>3. Keep only calls and messages from real people<br>4. Check social media when YOU choose, not when IT tells you<br><br>This one change gives you back ~1 hour per day of mental freedom.'}
+    },
+    {
+      badge:'think',badgeText:'🤖 THE ALGORITHM BUBBLE',
+      scene:'You watched ONE video about a controversial topic. Now your <span class="hl">entire feed is full of extreme versions</span> of that topic. The algorithm learned you engaged with it, so it shows you more and more intense versions to keep you watching.',
+      quote:{src:'🔬 Internal Meta Research (Leaked)',text:'Meta\'s own research found that their algorithm "actively amplifies divisive, emotionally charged content because it keeps users engaged longer." They chose profits over well-being.'},
+      brain:null,
+      choices:[
+        {e:'🤖',text:'Algorithms create "filter bubbles" — they show you increasingly extreme content to maximize engagement, regardless of truth or your wellbeing',correct:true},
+        {e:'📺',text:'The algorithm just shows me what I like — that\'s helpful',correct:false},
+        {e:'🌐',text:'I see a variety of content on my feed',correct:false}
+      ],
+      teach:'<strong>You don\'t control your feed — the algorithm does.</strong> It learns what makes you angry, scared, or curious, then feeds you MORE of exactly that. This creates "echo chambers" where you only see one perspective, and "rabbit holes" where content gets increasingly extreme. The algorithm doesn\'t care about truth — it cares about your attention.',
+      challenge:{title:'🌍 Break Your Bubble',text:'<strong>Try this:</strong> Search for the OPPOSITE viewpoint of something you believe. Read it fully. You don\'t have to agree — but understanding other perspectives is how free thinkers operate. The algorithm wants you in a bubble. YOU can choose to step out.'}
+    },
+    {
+      badge:'power',badgeText:'🦋 YOUR SUPERPOWER',
+      scene:'You\'ve now learned the <span class="hl">5 tricks</span> that social media uses: the slot machine, the like trap, FOMO, notifications, and algorithm bubbles. But here\'s the truth:',
+      quote:{src:'❤️ The Truth',text:'Social media isn\'t evil. It connects families across oceans, helps people learn, and gives a voice to those who had none. The problem isn\'t the tool — it\'s that the tool is designed to CONTROL you rather than SERVE you. Now that you see the tricks, you can use social media on YOUR terms.'},
+      brain:null,
+      choices:[
+        {e:'🦋',text:'I can enjoy social media AND control how much power it has over me — seeing the tricks IS the freedom',correct:true},
+        {e:'📵',text:'I should delete all social media forever',correct:false},
+        {e:'😰',text:'It\'s too powerful, I can\'t fight it',correct:false}
+      ],
+      teach:'<strong>Freedom isn\'t about quitting everything. It\'s about CHOOSING.</strong> Use social media to connect with friends, learn new things, and share your creativity. But check it on YOUR schedule. Turn off notifications. Recognize when you\'re scrolling mindlessly. Set time limits. You\'re not deleting the tool — you\'re becoming its master instead of its slave.',
+      challenge:{title:'🌟 Your Family Social Media Agreement',text:'<strong>Create together:</strong><br>📱 We check social media at specific times (not all day)<br>🔇 Notifications stay OFF for social media<br>🍽️ No phones during meals<br>😴 Phones charge OUTSIDE the bedroom at night<br>🗣️ We talk about what we see online — no judgment<br><br>Print this. Sign it together. Put it on the fridge. 🏠'}
+    }
+  ]
+},
+{
+  id:'sugar',emoji:'🥤',name:'Sugar & Junk Food',desc:'How brands engineer cravings',locked:false,
+  scenarios:[
+    {
+      badge:'trick',badgeText:'🧪 THE BLISS POINT',
+      scene:'Food scientists at companies like Coca-Cola and Doritos spend millions finding the <span class="hl">exact combination</span> of sugar, salt, and fat that makes food irresistible. They call this the "Bliss Point."',
+      quote:{src:'🧪 Food Science Research',text:'The "Bliss Point" is the precise amount of sugar that makes food maximally addictive — not too sweet, not too bland. Howard Moskowitz, a food scientist, helped optimize this formula for products consumed by millions of children daily.'},
+      brain:{title:'How Junk Food Hijacks Your Brain',desc:'Same dopamine trick as social media:',
+        steps:['Eat sugar 🍭','Dopamine spike! 💥','Crash... 📉','Crave more 🤤','Eat again 🔄']},
+      choices:[
+        {e:'🧪',text:'Junk food is literally engineered by scientists to be as addictive as possible — the "Bliss Point" is designed to override your willpower',correct:true},
+        {e:'🍕',text:'Food just tastes good because it tastes good, no tricks involved',correct:false},
+        {e:'💪',text:'If you have strong willpower you can resist any food',correct:false}
+      ],
+      teach:'<strong>It\'s NOT a willpower problem — it\'s a chemistry problem.</strong> When you crave Coca-Cola or chips, you\'re not weak. You\'re experiencing a response that was engineered by billion-dollar companies with teams of food scientists. Understanding this removes shame and gives you power. You\'re not fighting yourself — you\'re fighting a laboratory formula.',
+      challenge:{title:'🔍 Label Detective Game',text:'<strong>Next grocery trip, play this together:</strong><br>Pick up 5 products and read the sugar content. Convert to teaspoons (4g = 1 teaspoon). One can of Coke = about 10 teaspoons of sugar. A "healthy" granola bar might have 5-6. The person who finds the most hidden sugar WINS! 🏆'}
+    },
+    {
+      badge:'understand',badgeText:'📺 THE MARKETING MACHINE',
+      scene:'Children see an average of <span class="hl">10,000+ food ads per year</span> — and 90% of them are for junk food. These ads use bright colors, cartoon characters, and the word "fun" to associate unhealthy food with happiness.',
+      quote:{src:'📊 Marketing Research',text:'McDonald\'s spends $2+ billion per year on advertising. Most ads target children through toys, playgrounds, and cartoon characters. By age 3, most children can recognize the McDonald\'s logo before they can read.'},
+      brain:null,
+      choices:[
+        {e:'📺',text:'Companies spend billions to make children ASSOCIATE junk food with fun and happiness — this creates lifelong habits',correct:true},
+        {e:'🍟',text:'Ads just tell you about products, they don\'t change behavior',correct:false},
+        {e:'😊',text:'Junk food IS fun — the ads are just honest',correct:false}
+      ],
+      teach:'<strong>You were trained to crave junk food before you could read.</strong> Happy Meals, Tony the Tiger, the Coca-Cola polar bears — these aren\'t just mascots. They\'re psychological tools designed to create emotional bonds between children and products. This isn\'t about never eating a burger. It\'s about knowing WHY you want it and choosing freely.',
+      challenge:{title:'📺 Ad Spotter Challenge',text:'<strong>Watch TV or YouTube together for 30 minutes.</strong> Count every food ad. For each one, ask: "What feeling are they trying to create?" Happy? Cool? Fun? None of them say "This will make you tired and sick." Because the truth doesn\'t sell. Seeing this changes how you watch everything.'}
+    },
+    {
+      badge:'power',badgeText:'💪 FUEL VS. FUN',
+      scene:'Here\'s the truth nobody argues with: your body is an <span class="hl">incredible machine</span>. What you put in it determines how fast you can run, how clearly you can think, how well you sleep, and how you feel every single day.',
+      quote:{src:'❤️ No Judgment, Just Facts',text:'This isn\'t about being "perfect" or never eating candy. It\'s about understanding that food companies engineer products to make you eat MORE than your body needs. Once you see this, you can enjoy treats AND fuel your body well. Both are possible.'},
+      brain:null,
+      choices:[
+        {e:'⚡',text:'My body is amazing and I can CHOOSE to fuel it well most of the time while still enjoying treats — balance is freedom',correct:true},
+        {e:'🚫',text:'I should never eat junk food again',correct:false},
+        {e:'🍕',text:'Life\'s short, eat whatever you want',correct:false}
+      ],
+      teach:'<strong>The 80/20 approach:</strong> Fuel your body with real food 80% of the time. Enjoy treats 20% of the time, guilt-free. No restriction, no shame. The difference is: when you CHOOSE a treat knowing exactly how it was engineered, you\'re free. When you eat it because a craving controls you, you\'re not.',
+      challenge:{title:'🍎 The 7-Day Experiment',text:'<strong>Family challenge:</strong> For 7 days, replace ONE sugary drink per day with water. Just one. Track how you feel: energy, sleep, mood. Most families report better energy by day 3 and better sleep by day 5. You\'re not quitting anything — you\'re adding something better.'}
+    }
+  ]
+},
+{
+  id:'ai',emoji:'🤖',name:'AI Dependency',desc:'When AI thinks FOR you instead of WITH you',locked:false,
+  scenarios:[
+    {
+      badge:'think',badgeText:'🧠 THE THINKING MUSCLE',
+      scene:'You have a homework question. Instead of trying to think about it yourself, you immediately <span class="hl">paste it into ChatGPT</span>. The answer appears in 3 seconds. You copy-paste it. You learned nothing.',
+      quote:{src:'🧪 Cognitive Science',text:'Your brain works like a muscle — it gets stronger when you use it and weaker when you don\'t. When AI thinks FOR you instead of WITH you, your critical thinking, creativity, and problem-solving abilities literally shrink from lack of use.'},
+      brain:{title:'AI Dependency Loop',desc:'How thinking muscles weaken:',
+        steps:['Question? 🤔','Ask AI instantly 🤖','Get answer 📋','Don\'t think 🧠💤','Brain weakens 📉']},
+      choices:[
+        {e:'🧠',text:'Using AI for every answer is like using a wheelchair when you can walk — your thinking muscles atrophy from lack of use',correct:true},
+        {e:'🤖',text:'AI is smarter so why waste time thinking myself?',correct:false},
+        {e:'📚',text:'AI is just like using a textbook — same thing',correct:false}
+      ],
+      teach:'<strong>AI is an incredible tool — but only when YOU think first.</strong> Try to solve the problem yourself for 10 minutes. THEN use AI to check your work, explore further, or explain what you didn\'t understand. The difference: Tool = AI helps YOUR thinking. Dependency = AI REPLACES your thinking.',
+      challenge:{title:'🧠 The "Think First" Rule',text:'<strong>New family rule:</strong> Before asking AI anything, spend 5 minutes thinking about it yourself. Write down your best guess. THEN ask AI. Compare your answer with AI\'s. You\'ll be surprised how often your instinct was right — and how much stronger your brain gets.'}
+    },
+    {
+      badge:'understand',badgeText:'✍️ THE CREATIVITY DRAIN',
+      scene:'Your teacher assigns a creative writing essay. You ask AI to write it. You get an A. But the essay has <span class="hl">no part of YOU in it</span> — no unique perspective, no personal story, no original ideas. It\'s perfect... and empty.',
+      quote:{src:'❤️ The Human Truth',text:'AI can generate a perfect essay. But it can\'t feel the sadness of losing a pet, the joy of scoring a goal, or the confusion of a first crush. YOUR experiences, YOUR voice, YOUR weird ideas — that\'s what makes writing ALIVE. AI can help polish. It can\'t replace your soul.'},
+      brain:null,
+      choices:[
+        {e:'❤️',text:'AI-written work is technically correct but has no human soul — my unique voice and experiences are irreplaceable',correct:true},
+        {e:'🤖',text:'AI writes better than me anyway, so what\'s the point?',correct:false},
+        {e:'📝',text:'Nobody can tell the difference',correct:false}
+      ],
+      teach:'<strong>The world doesn\'t need more perfect AI text. It needs YOUR imperfect, beautiful, human voice.</strong> Use AI to fix grammar, suggest improvements, or brainstorm ideas. But the STORY must be yours. The OPINIONS must be yours. The WEIRD CONNECTIONS only your brain can make — those are your superpower that no AI will ever have.',
+      challenge:{title:'✍️ The "Only I Can Write This" Challenge',text:'<strong>Write 3 sentences that only YOU could write.</strong> About a memory, a feeling, a weird observation. Something AI could never generate because it hasn\'t lived YOUR life. Read them to each other. That\'s the magic that makes you irreplaceable.'}
+    },
+    {
+      badge:'power',badgeText:'🤝 AI AS PARTNER, NOT MASTER',
+      scene:'The future belongs to people who can <span class="hl">work WITH AI as a partner</span> — not people who depend on it, and not people who fear it.',
+      quote:{src:'🌟 The Smart Approach',text:'The most successful people of the future won\'t be those who avoid AI or those who let AI do everything. They\'ll be the ones who use AI to AMPLIFY their own thinking, creativity, and skills — like a power tool that makes a skilled carpenter even better.'},
+      brain:null,
+      choices:[
+        {e:'🤝',text:'AI is a power tool — amazing in skilled hands, useless (or dangerous) without human judgment, creativity, and ethics',correct:true},
+        {e:'🚫',text:'We should avoid AI completely',correct:false},
+        {e:'🤖',text:'Let AI handle everything — humans are becoming obsolete',correct:false}
+      ],
+      teach:'<strong>The formula: YOUR thinking + AI power = unstoppable.</strong> Think of it like this: A calculator doesn\'t replace understanding math — it makes a mathematician faster. AI doesn\'t replace understanding the world — it makes a thinker more powerful. Learn to think. Learn to create. Learn to question. THEN use AI to go further.',
+      challenge:{title:'🤝 Practice AI Partnership',text:'<strong>Try this homework approach:</strong><br>1️⃣ Read the question yourself<br>2️⃣ Think for 5-10 minutes, write your ideas<br>3️⃣ THEN ask AI: "Here\'s my thinking on this: [your ideas]. What am I missing?"<br>4️⃣ AI adds to YOUR thinking instead of replacing it<br><br>This is how professionals use AI. Start now and you\'ll be years ahead.'}
+    }
+  ]
+},
+{
+  id:'smoking',emoji:'🚬',name:'Smoking & Vaping',desc:'The oldest trick in the book',locked:false,
+  scenarios:[
+    {
+      badge:'trick',badgeText:'🧪 NICOTINE: THE FASTEST HOOK',
+      scene:'A friend offers you a vape. "Just try it once," they say. <span class="hl">One puff</span>. What they don\'t tell you is what happens in your brain in the next 7 seconds:',
+      quote:{src:'🧪 Neuroscience',text:'Nicotine reaches your brain in 7 seconds — faster than any injected drug. It triggers a massive dopamine release, then crashes. Your brain immediately starts craving the next hit. One cigarette can change your brain chemistry. Vaping delivers even MORE nicotine than traditional cigarettes.'},
+      brain:{title:'The 7-Second Trap',desc:'One puff starts this loop:',
+        steps:['Puff 💨','7 seconds → brain 🧠','Dopamine FLOOD 💥','Crash in 20 min 📉','CRAVE another 🔄']},
+      choices:[
+        {e:'🧪',text:'Nicotine rewires your brain in SECONDS — "just one puff" is exactly how every addiction starts because the chemistry is that fast',correct:true},
+        {e:'💨',text:'One puff can\'t really do anything — you need to smoke a lot to get addicted',correct:false},
+        {e:'😎',text:'Vaping is different from smoking — it\'s basically harmless',correct:false}
+      ],
+      teach:'<strong>Tobacco companies KNEW one puff was enough to start the hook.</strong> Internal documents from the 1960s show they understood nicotine\'s addictive power and deliberately engineered cigarettes (and now vapes) to deliver it as fast as possible. Vaping devices deliver nicotine FASTER and in HIGHER concentrations. "Just try it once" is not a friend\'s advice — it\'s the tobacco industry\'s business model.',
+      challenge:{title:'💪 The "What They Don\'t Show You" Talk',text:'<strong>Discuss together:</strong> Tobacco and vape companies spend billions making their products look cool, fun, and social. They never show the reality: addiction, health damage, spending thousands of dollars on something that makes you sick. Talk about what "cool" really means to your family.'}
+    },
+    {
+      badge:'power',badgeText:'🌬️ BREATHING FREE',
+      scene:'Every person who has quit smoking says the same thing: <span class="hl">"I wish I had never started."</span> Not one person has ever said: "I\'m glad I got addicted." The best time to fight this is BEFORE the first puff.',
+      quote:{src:'❤️ Freedom',text:'Not smoking isn\'t about missing out. It\'s about keeping something precious: your freedom. Once nicotine hooks you, quitting becomes one of the hardest things a human can do. Staying free is the easiest victory you\'ll ever win — just don\'t start.'},
+      brain:null,
+      choices:[
+        {e:'🌬️',text:'The greatest power is never starting — keeping your freedom is easier than getting it back',correct:true},
+        {e:'🤷',text:'I can quit anytime if I start',correct:false},
+        {e:'😎',text:'Everyone experiments, it\'s part of growing up',correct:false}
+      ],
+      teach:'<strong>You are already free. Stay that way.</strong> Every single person addicted to nicotine started with "just one." If a friend offers you a vape and says "don\'t be scared," remember: the brave choice is saying NO. It takes zero courage to follow the crowd. It takes real strength to say "I\'m good, thanks" and mean it.',
+      challenge:{title:'🛡️ Practice Saying No',text:'<strong>Role play together:</strong><br>Parent: "Come on, everyone\'s vaping! Just try it!"<br>Child practices responses:<br>• "Nah, I\'m good." (casual and confident)<br>• "I don\'t need that." (simple and strong)<br>• "I like being able to breathe." (humor)<br><br>Practice until it feels natural. The first "no" is always the hardest.'}
+    }
+  ]
+},
+{
+  id:'health',emoji:'🌿',name:'Healthy Life',desc:'Your body is your home — take care of it',locked:true,
+  scenarios:[]
+},
+{
+  id:'gaming',emoji:'🎮',name:'Gaming Balance',desc:'Play games without games playing you',locked:true,
+  scenarios:[]
+}
+];
+
+let curTopic=null,round=0,score=0,right=0,wrong=0;
+let hist=['scrWelcome'];
+
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');if(id==='scrWelcome')renderTopics();
+  hist.push(id);updBack();window.scrollTo(0,0)}
+function goBack(){if(hist.length<=1)return;hist.pop();const p=hist[hist.length-1];
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(p).classList.add('active');if(p==='scrWelcome')renderTopics();updBack()}
+function updBack(){const b=document.getElementById('btnBack');const c=hist[hist.length-1];
+  b.classList.toggle('show',hist.length>1&&c!=='scrGame')}
+
+function renderTopics(){
+  let h='';TOPICS.forEach(t=>{
+    h+=`<div class="topic-card${t.locked?' locked':''}" onclick="${t.locked?'':'startTopic(\''+t.id+'\')'}">
+      <div class="topic-emoji">${t.emoji}</div>
+      <div class="topic-name">${t.name}</div>
+      <div class="topic-desc">${t.desc}</div>
+      ${t.locked?'<div class="topic-lock">🔒 Coming Soon</div>':''}
+    </div>`;
+  });document.getElementById('topicGrid').innerHTML=h}
+
+function startTopic(id){
+  curTopic=TOPICS.find(t=>t.id===id);round=0;score=0;right=0;wrong=0;
+  document.getElementById('rT').textContent=curTopic.scenarios.length;
+  showScreen('scrGame');document.getElementById('btnBack').classList.remove('show');loadRound()}
+
+function loadRound(){
+  if(round>=curTopic.scenarios.length){endGame();return}
+  const s=curTopic.scenarios[round];
+  document.getElementById('freeScore').textContent=score;
+  document.getElementById('rN').textContent=round+1;
+  document.getElementById('pBar').style.width=((round+1)/curTopic.scenarios.length*100)+'%';
+
+  let brainHtml='';
+  if(s.brain){
+    brainHtml=`<div class="brain-box"><h4>${s.brain.title}</h4><p>${s.brain.desc}</p>
+      <div class="brain-visual">${s.brain.steps.map((st,i)=>`<div class="brain-step">${st}${i<s.brain.steps.length-1?'<span class="arrow"> →</span>':''}</div>`).join('')}</div></div>`;
+  }
+
+  let html=`<div class="scene-card">
+    <div class="scene-badge ${s.badge}">${s.badgeText}</div>
+    <div class="scene-text">${s.scene}</div>
+    <div class="scene-quote"><span class="src">${s.quote.src}</span>${s.quote.text}</div>
+    ${brainHtml}
+  </div>
+  <div class="choices" id="choices">`;
+  s.choices.forEach((c,i)=>{html+=`<button class="btn-choice" onclick="choose(${i})"><span class="ch-e">${c.e}</span>${c.text}</button>`});
+  html+=`</div>`;
+  document.getElementById('gameArea').innerHTML=html}
+
+function choose(idx){
+  const s=curTopic.scenarios[round];const ok=s.choices[idx].correct;
+  const btns=document.querySelectorAll('.btn-choice');
+  btns.forEach((b,i)=>{b.onclick=null;b.style.cursor='default';
+    if(s.choices[i].correct)b.classList.add('correct-r');
+    else if(i===idx)b.classList.add('wrong-r');else b.style.opacity='0.3'});
+  if(ok){score+=10;right++}else{wrong++;document.getElementById('app').classList.add('shake');
+    setTimeout(()=>document.getElementById('app').classList.remove('shake'),400)}
+  document.getElementById('freeScore').textContent=score;
+
+  setTimeout(()=>{
+    let html=`<div class="result-card ${ok?'win':'lose'}">
+      <div class="result-emoji">${ok?'🦋':'💡'}</div>
+      <div class="result-title">${ok?'You see the trick!':'Now you know!'}</div></div>
+    <div class="teach-card">
+      <div class="teach-header"><span>🧠</span><span>Understanding</span></div>
+      <div class="teach-body">${s.teach}</div></div>
+    <div class="challenge-box">
+      <h4>${s.challenge.title}</h4>
+      <p>${s.challenge.text}</p></div>
+    <button class="btn-next" onclick="nextRound()">${round<curTopic.scenarios.length-1?'Next Insight →':'See My Results 🦋'}</button>`;
+    document.getElementById('gameArea').innerHTML=html;
+    window.scrollTo({top:0,behavior:'smooth'})},600)}
+
+function nextRound(){round++;loadRound()}
+
+function endGame(){
+  const pct=Math.round((right/curTopic.scenarios.length)*100);
+  let icon,title,sub;
+  if(pct>=90){icon='🦋';title='Truly Free Mind';sub='You see all the tricks. You choose with open eyes.'}
+  else if(pct>=70){icon='🌟';title='Eyes Opening';sub='You\'re seeing through the tricks. Keep going!'}
+  else{icon='🌱';title='Growing Awareness';sub='Every insight makes you harder to manipulate.'}
+  document.getElementById('eIcon').textContent=icon;
+  document.getElementById('eTitle').textContent=title;
+  document.getElementById('eSub').textContent=sub;
+  document.getElementById('eScore').textContent=score;
+  document.getElementById('eRight').textContent=right;
+  document.getElementById('eWrong').textContent=wrong;
+  hist=['scrWelcome'];showScreen('scrEnd')}
+
+function shareR(){
+  const t=`🦋 Free Mind: ${score}pts | I understand ${right} manipulation tricks\nLearn to see the tricks & choose freely!\nPlay free → smslabs.com/free-mind`;
+  if(navigator.share)navigator.share({text:t});else navigator.clipboard.writeText(t).then(()=>alert('Copied!'))}
+
+renderTopics();
+</script>
+</body>
+</html>
