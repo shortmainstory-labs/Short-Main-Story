@@ -9,15 +9,13 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --ink:#1A1A2E; --ink2:#16213E; --paper:#FAFAF8; --warm:#F8F4EF; --cream:#FFF8E8;
-  --fire:#E94560; --fire2:rgba(233,69,96,0.06);
+  --ink:#0D0D0D; --ink2:#1A1A1A; --paper:#FAFAF9; --warm:#F5F3F0; --cream:#FFF9F0;
+  --sun:#E67E22; --sun-light:#F5A623; --sun2:rgba(230,126,34,0.08);
   --ocean:#3A86FF; --ocean2:rgba(58,134,255,0.06);
-  --forest:#06D6A0; --forest2:rgba(6,214,160,0.06);
-  --violet:#8338EC; --violet2:rgba(131,56,236,0.06);
-  --sun:#F5A623;
-  --dim:#6B7280; --muted:#9CA3AF; --border:rgba(0,0,0,0.05);
-  --shadow-sm:0 1px 3px rgba(0,0,0,0.04);
-  --shadow-md:0 4px 20px rgba(0,0,0,0.06);
+  --violet:#6D28D9; --violet2:rgba(109,40,217,0.06);
+  --dim:#525252; --muted:#737373; --border:rgba(0,0,0,0.06);
+  --shadow-sm:0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md:0 4px 16px rgba(0,0,0,0.06);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',sans-serif;background:var(--paper);color:var(--ink)}
@@ -27,18 +25,19 @@ nav{border-bottom:1px solid var(--border);background:rgba(250,250,248,.9);backdr
 .brand{font-family:'Fraunces',serif;font-weight:700;text-decoration:none;color:var(--ink)}
 .nav-in a{color:var(--dim);text-decoration:none}
 header{padding:56px 0 28px}
-.k{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em;color:var(--fire);font-size:.78rem}
+.k{font-family:'JetBrains Mono',monospace;text-transform:uppercase;letter-spacing:.04em;color:var(--sun);font-size:.78rem}
 h1{font-family:'Fraunces',serif;line-height:1.08;font-size:clamp(2rem,5vw,3.4rem);margin:8px 0 12px}
 .lead{max-width:760px;color:var(--dim);font-size:clamp(1rem,2vw,1.14rem)}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;padding:10px 0 22px}
-.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:20px;box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px}
 .card h2{font-family:'Fraunces',serif;font-size:1.45rem}
 .tag{display:inline-flex;align-self:flex-start;padding:4px 9px;border-radius:999px;font-size:.76rem;font-weight:700}
 .tag.main{background:var(--ocean2);color:var(--ocean)}
 .tag.soon{background:var(--violet2);color:var(--violet)}
 .btn{display:inline-flex;justify-content:center;align-items:center;padding:11px 14px;border-radius:10px;text-decoration:none;font-weight:700}
 .btn-tg{background:#229ED9;color:#fff}
-.btn-mail{background:var(--ink);color:#fff}
+.btn-mail{background:var(--sun);color:#fff}
+.btn-mail:hover{background:var(--ink)}
 .placeholder{background:var(--warm);border:1px dashed var(--border);border-radius:12px;padding:12px;color:var(--dim);font-size:.92rem}
 .examples{margin:12px 0 24px;padding:22px;background:linear-gradient(135deg,var(--warm),#fff);border:1px solid var(--border);border-radius:18px}
 .examples h3{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:10px}
