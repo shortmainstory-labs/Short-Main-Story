@@ -3,565 +3,167 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Short Main Story — Safety Intelligence for Families</title>
-<meta name="description" content="Safety games, smart tools, and real-time safety intelligence delivered to your phone. Know what's safe, what's changing, and what's coming next.">
+<title>Short Main Story — Useful Tools for Real Life</title>
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900;1,9..40,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,700;0,9..144,900;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root{
-  --ink:#0D0D0D;--ink2:#1A1A1A;--paper:#FAFAF9;--warm:#F5F3F0;--cream:#FFF9F0;--ice:#FAFAF9;
-  --sun:#E67E22;--sun-light:#F5A623;--sun2:rgba(230,126,34,0.08);--sun3:rgba(230,126,34,0.15);
-  --amber:#F59E0B;--amber2:rgba(245,158,11,0.08);
-  --ocean:#3A86FF;--ocean2:rgba(58,134,255,0.06);
-  --forest:#059669;--forest2:rgba(5,150,105,0.08);
-  --violet:#6D28D9;--violet2:rgba(109,40,217,0.06);
-  --tg:#229ED9;--tg2:rgba(34,158,217,0.06);
-  --dim:#525252;--muted:#737373;--border:rgba(0,0,0,0.06);
-  --s-sm:0 1px 2px rgba(0,0,0,0.04);--s-md:0 4px 16px rgba(0,0,0,0.06);--s-lg:0 8px 32px rgba(0,0,0,0.08);
-  --f:'DM Sans',sans-serif;--fd:'Fraunces',serif;--fm:'JetBrains Mono',monospace;
-}
-*{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{font-family:var(--f);background:var(--paper);color:var(--ink);overflow-x:hidden}
-
-/* NAV */
-nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:0 24px;height:60px;
-  display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border)}
-.nb{display:flex;align-items:center;gap:12px}
-.nl{width:32px;height:32px;background:var(--ink);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;color:var(--sun-light)}
-.nn{font-family:var(--fd);font-weight:700;font-size:0.95rem;letter-spacing:-0.02em;color:var(--ink)}
-.nk{display:flex;gap:24px;align-items:center}
-.nk a{color:var(--dim);text-decoration:none;font-size:0.8rem;font-weight:500;transition:color 0.2s}
-.nk a:hover{color:var(--ink)}
-.btn-n{background:var(--sun);color:white;border:none;padding:8px 18px;border-radius:6px;
-  font-family:var(--f);font-size:0.75rem;font-weight:600;cursor:pointer;transition:all 0.2s;text-decoration:none}
-.btn-n:hover{background:var(--ink);transform:translateY(-1px);box-shadow:var(--s-md)}
-
-/* HERO */
-.hero{padding:128px 24px 68px;max-width:860px;margin:0 auto;text-align:center;position:relative}
-.hero::before{content:'';position:absolute;top:70px;left:50%;transform:translateX(-50%);width:580px;height:580px;border-radius:50%;z-index:0;
-  background:radial-gradient(circle,rgba(230,126,34,0.06) 0%,rgba(245,158,11,0.03) 40%,transparent 70%);pointer-events:none}
-.hp{font-family:var(--fm);font-size:0.48rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--sun);
-  display:inline-flex;align-items:center;gap:8px;background:var(--sun2);padding:6px 14px;border-radius:6px;margin-bottom:16px;position:relative;z-index:1}
-.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(2.4rem,5.5vw,3.9rem);line-height:1.1;letter-spacing:-0.03em;
-  position:relative;z-index:1;max-width:660px;margin:0 auto}
-.hero h1 em{font-style:italic;color:var(--sun);background:linear-gradient(transparent 65%,var(--sun2) 65%)}
-.hs{font-size:1.05rem;color:var(--dim);max-width:520px;margin:16px auto 28px;line-height:1.7;position:relative;z-index:1}
-.hc{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
-.btn{display:inline-flex;align-items:center;gap:7px;padding:12px 22px;border-radius:6px;
-  font-family:var(--f);font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.25s;text-decoration:none;border:none}
-.btn-p{background:var(--sun);color:white;box-shadow:0 2px 12px rgba(230,126,34,0.25)}
-.btn-p:hover{background:var(--ink);transform:translateY(-2px);box-shadow:var(--s-md)}
-.btn-s{background:white;color:var(--ink);border:1.5px solid var(--border)}
-.btn-s:hover{border-color:var(--sun);color:var(--sun);transform:translateY(-2px)}
-.btn-tg{background:var(--tg);color:white}
-.btn-tg:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(34,158,217,0.3)}
-.hpr{display:flex;gap:20px;justify-content:center;margin-top:30px;flex-wrap:wrap;position:relative;z-index:1}
-.pr{display:flex;align-items:center;gap:5px;font-size:0.72rem;color:var(--muted)}
-.pr strong{color:var(--ink);font-weight:700}
-
-/* SHARED */
-section{padding:76px 24px}
-.in{max-width:860px;margin:0 auto}
-.ey{font-family:var(--fm);font-size:0.46rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--dim);margin-bottom:9px}
-.st{font-family:var(--fd);font-weight:800;font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.2;max-width:560px}
-.st em{font-style:italic;color:var(--sun)}
-.sd{font-size:0.92rem;color:var(--dim);max-width:470px;line-height:1.7;margin-top:10px}
-
-/* STATS */
-.stats{background:var(--ink);padding:40px 24px;border-top:3px solid var(--sun)}
-.stats-in{max-width:860px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
-.si{text-align:center}
-.sn{font-family:var(--fd);font-weight:900;font-size:1.75rem;color:white;letter-spacing:-0.02em}
-.sl{font-size:0.65rem;color:rgba(255,255,255,0.5);margin-top:4px;text-transform:uppercase;letter-spacing:0.04em}
-
-/* SAFETY INTELLIGENCE — THE BIG NEW SECTION */
-.intel-sec{background:var(--ice)}
-.intel-hero{text-align:center;margin-bottom:36px}
-.intel-icon{font-size:3rem;margin-bottom:10px}
-.intel-example{background:white;border:1px solid var(--border);border-radius:16px;padding:20px;max-width:520px;
-  margin:24px auto 0;box-shadow:var(--s-sm);text-align:left}
-.intel-example-label{font-family:var(--fm);font-size:0.4rem;text-transform:uppercase;letter-spacing:0.1em;
-  color:var(--tg);margin-bottom:10px;display:flex;align-items:center;gap:6px}
-.intel-msg{font-size:0.8rem;line-height:1.7;color:var(--ink);padding:12px;background:var(--tg2);border-radius:12px;border-left:3px solid var(--tg)}
-.intel-msg strong{color:var(--sun)}
-.intel-msg .tag{display:inline-block;font-family:var(--fm);font-size:0.38rem;text-transform:uppercase;
-  letter-spacing:0.1em;padding:2px 6px;border-radius:4px;margin-right:4px}
-.intel-msg .tag-alert{background:var(--sun2);color:var(--sun)}
-.intel-msg .tag-new{background:var(--forest2);color:var(--forest)}
-.intel-msg .tag-trend{background:var(--violet2);color:var(--violet)}
-.intel-msg .tag-predict{background:var(--ocean2);color:var(--ocean)}
-
-.intel-types{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px}
-.intel-type{background:white;border:1px solid var(--border);border-radius:14px;padding:18px 16px;box-shadow:var(--s-sm)}
-.it-emoji{font-size:1.6rem;margin-bottom:8px}
-.it-name{font-weight:700;font-size:0.88rem;margin-bottom:3px}
-.it-desc{font-size:0.72rem;color:var(--dim);line-height:1.6}
-.it-ex{font-family:var(--fm);font-size:0.55rem;color:var(--muted);margin-top:6px;font-style:italic}
-
-/* CHANNELS */
-.ch-sec{background:var(--warm)}
-.ch-grid{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start;margin-top:28px}
-.ch-list{}
-.ch-item{display:flex;gap:12px;align-items:flex-start;padding:14px 0;border-bottom:1px solid var(--border)}
-.ch-item:last-child{border:none}
-.ch-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;flex-shrink:0;background:white;border:1px solid var(--border);box-shadow:var(--s-sm)}
-.ch-name{font-weight:700;font-size:0.85rem;margin-bottom:2px}
-.ch-desc{font-size:0.72rem;color:var(--dim);line-height:1.55}
-.ch-tag{font-family:var(--fm);font-size:0.35rem;text-transform:uppercase;letter-spacing:0.1em;
-  padding:2px 6px;border-radius:4px;display:inline-block;margin-top:4px}
-.ch-tag.now{background:var(--forest2);color:var(--forest)}
-.ch-tag.next{background:var(--ocean2);color:var(--ocean)}
-.ch-tag.later{background:rgba(0,0,0,0.04);color:var(--muted)}
-.ch-signup{background:white;border:1px solid var(--border);border-radius:18px;padding:28px;
-  text-align:center;box-shadow:var(--s-md)}
-.ch-signup h3{font-family:var(--fd);font-weight:700;font-size:1.15rem;margin-bottom:4px}
-.ch-signup>p{font-size:0.75rem;color:var(--dim);margin-bottom:18px;line-height:1.6}
-.ch-signup-opt{display:flex;flex-direction:column;gap:10px}
-.btn-ch{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;
-  border-radius:11px;font-family:var(--f);font-size:0.85rem;font-weight:600;
-  cursor:pointer;transition:all 0.25s;text-decoration:none;border:none;width:100%}
-.btn-ch:hover{transform:translateY(-2px)}
-.btn-ch-tg{background:var(--tg);color:white}
-.btn-ch-email{background:var(--ink);color:white}
-.btn-ch-wa{background:#25D366;color:white}
-.ch-note{font-size:0.58rem;color:var(--muted);margin-top:10px}
-
-/* GAMES */
-.games-sec{background:var(--paper)}
-.gg{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:28px}
-.gc{background:white;border-radius:12px;padding:24px 20px;position:relative;border:1px solid var(--border);
-  transition:all 0.3s;cursor:pointer;text-decoration:none;color:var(--ink);display:block;
-  box-shadow:var(--s-sm);overflow:hidden}
-.gc:hover{transform:translateY(-3px);box-shadow:var(--s-lg);border-color:var(--sun3)}
-.gc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.gc:nth-child(1)::before{background:var(--sun)}.gc:nth-child(2)::before{background:var(--amber)}
-.gc:nth-child(3)::before{background:var(--ocean)}.gc:nth-child(4)::before{background:var(--violet)}
-.ge{font-size:2rem;margin-bottom:10px}
-.gt{font-family:var(--fm);font-size:0.38rem;text-transform:uppercase;letter-spacing:0.1em;
-  display:inline-block;padding:3px 7px;border-radius:4px;margin-bottom:7px}
-.gc:nth-child(1) .gt{background:var(--sun2);color:var(--sun)}
-.gc:nth-child(2) .gt{background:var(--amber2);color:var(--amber)}
-.gc:nth-child(3) .gt{background:var(--ocean2);color:var(--ocean)}
-.gc:nth-child(4) .gt{background:var(--violet2);color:var(--violet)}
-.gn{font-family:var(--fd);font-weight:700;font-size:1.1rem;margin-bottom:4px}
-.gd{font-size:0.76rem;color:var(--dim);line-height:1.6}
-.gm{display:flex;gap:9px;margin-top:10px;font-size:0.55rem;color:var(--muted);font-family:var(--fm)}
-
-/* TOOLS */
-.tools-sec{background:var(--warm)}
-.tg-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-top:28px}
-.tc{background:white;border:1px solid var(--border);border-radius:16px;padding:24px 20px;
-  box-shadow:var(--s-sm);transition:all 0.3s;position:relative;overflow:hidden}
-.tc:hover{transform:translateY(-3px);box-shadow:var(--s-md)}
-.tc-badge{position:absolute;top:12px;right:12px;font-family:var(--fm);font-size:0.36rem;
-  text-transform:uppercase;letter-spacing:0.1em;padding:3px 7px;border-radius:4px}
-.tc-badge.soon{background:var(--ocean2);color:var(--ocean)}
-.tc-badge.plan{background:rgba(0,0,0,0.04);color:var(--muted)}
-.tc-e{font-size:2rem;margin-bottom:8px}
-.tc-n{font-family:var(--fd);font-weight:700;font-size:1.05rem;margin-bottom:3px}
-.tc-d{font-size:0.75rem;color:var(--dim);line-height:1.6}
-.tc-f{list-style:none;margin-top:8px}
-.tc-f li{font-size:0.68rem;color:var(--dim);padding:2px 0;display:flex;align-items:center;gap:5px}
-.tc-f li::before{content:'→';color:var(--sun);font-weight:700;font-size:0.65rem}
-
-/* DIFF */
-.diff-sec{background:white}
-.dg{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
-.dc{border-radius:14px;padding:20px 18px;border:1px solid var(--border)}
-.dc.old{background:rgba(0,0,0,0.01)}
-.dc.new{background:white;border-color:var(--sun3);box-shadow:var(--s-md)}
-.dl{font-family:var(--fm);font-size:0.4rem;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;
-  display:inline-block;padding:3px 7px;border-radius:4px}
-.dc.old .dl{background:rgba(0,0,0,0.04);color:var(--muted)}
-.dc.new .dl{background:var(--sun2);color:var(--sun)}
-.di{display:flex;align-items:flex-start;gap:7px;padding:5px 0;font-size:0.76rem;line-height:1.55;color:var(--dim)}
-
-/* SCHOOLS */
-.school-sec{background:var(--cream)}
-.sg{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:center;margin-top:24px}
-.sf{display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-bottom:1px solid var(--border)}
-.sf:last-child{border:none}
-.sf-i{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;background:white;border:1px solid var(--border);box-shadow:var(--s-sm)}
-.sf-t{font-weight:700;font-size:0.82rem;margin-bottom:2px}
-.sf-p{font-size:0.72rem;color:var(--dim);line-height:1.55}
-.scta{background:white;border-radius:16px;padding:26px;text-align:center;border:1px solid var(--border);box-shadow:var(--s-md)}
-.scta h3{font-family:var(--fd);font-weight:700;font-size:1.15rem;margin-bottom:5px}
-.spr{font-family:var(--fd);font-weight:900;font-size:2.3rem;color:var(--sun)}
-.spr-n{font-size:0.7rem;color:var(--muted);margin-bottom:12px}
-.slist{text-align:left;list-style:none;margin-bottom:16px}
-.slist li{font-size:0.78rem;color:var(--dim);padding:4px 0;display:flex;align-items:center;gap:6px}
-.slist li::before{content:'✓';color:var(--forest);font-weight:700}
-.btn-sc{display:inline-block;background:var(--ink);color:white;border:none;padding:11px 24px;
-  border-radius:11px;font-family:var(--f);font-size:0.82rem;font-weight:600;cursor:pointer;
-  transition:all 0.25s;text-decoration:none}
-.btn-sc:hover{transform:translateY(-2px);box-shadow:var(--s-md)}
-
-/* QUOTE */
-.quote-sec{background:var(--cream);text-align:center}
-
-/* CTA */
-.cta-sec{background:var(--ink);padding:76px 24px;text-align:center;border-top:3px solid var(--sun)}
-.cta-sec h2{font-family:var(--fd);font-weight:900;font-size:clamp(1.8rem,4.5vw,2.7rem);
-  color:white;max-width:560px;margin:0 auto 10px;line-height:1.2;letter-spacing:-0.02em}
-.cta-sec h2 em{font-style:italic;color:var(--sun-light)}
-.cta-sec>p{font-size:0.92rem;color:rgba(255,255,255,0.5);max-width:440px;margin:0 auto 26px;line-height:1.7}
-.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
-.cta-btns .btn-p{background:var(--sun);box-shadow:0 2px 12px rgba(230,126,34,0.3)}
-.cta-btns .btn-p:hover{background:var(--sun-light)}
-
-/* FOOTER */
-footer{background:var(--ink2);padding:36px 24px;text-align:center;border-top:3px solid var(--sun)}
-.fb{font-family:var(--fd);font-weight:700;font-size:0.98rem;color:white;margin-bottom:4px;letter-spacing:-0.02em}
-.fs{font-size:0.7rem;color:rgba(255,255,255,0.35);margin-bottom:12px}
-.fl{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
-.fl a{color:rgba(255,255,255,0.4);text-decoration:none;font-size:0.72rem;transition:color 0.2s}
-.fl a:hover{color:var(--sun-light)}
-.fc{font-size:0.55rem;color:rgba(255,255,255,0.2)}
-
-/* ANIM */
-.rv{opacity:0;transform:translateY(26px);transition:all 0.8s cubic-bezier(0.16,1,0.3,1)}
-.rv.vis{opacity:1;transform:translateY(0)}
-.d1{transition-delay:0.1s}.d2{transition-delay:0.2s}.d3{transition-delay:0.3s}.d4{transition-delay:0.4s}
-
-@media(max-width:768px){
-  .nk a:not(.btn-n){display:none}
-  .gg,.tg-grid,.dg,.intel-types{grid-template-columns:1fr}
-  .how-g{grid-template-columns:1fr;gap:12px}
-  .sg,.ch-grid{grid-template-columns:1fr}
-  .stats-in{grid-template-columns:repeat(2,1fr);gap:12px}
-  .hero{padding:108px 18px 52px}
-}
-@media(max-width:480px){section{padding:52px 16px}}
+:root{--ink:#1A1A2E;--paper:#FAFAF8;--warm:#F8F4EF;--fire:#E94560;--fire2:rgba(233,69,96,0.06);--ocean:#3A86FF;--ocean2:rgba(58,134,255,0.06);--forest:#06D6A0;--forest2:rgba(6,214,160,0.06);--violet:#8338EC;--violet2:rgba(131,56,236,0.06);--sun:#F5A623;--sun2:rgba(245,166,35,0.06);--dim:#6B7280;--muted:#9CA3AF;--border:rgba(0,0,0,0.06);--card:white;--shadow-md:0 4px 20px rgba(0,0,0,0.06);--radius:16px;--f:'DM Sans',sans-serif;--fd:'Fraunces',serif;--fm:'JetBrains Mono',monospace}
+*{margin:0;padding:0;box-sizing:border-box}body{font-family:var(--f);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:var(--ocean);text-decoration:none}a:hover{text-decoration:underline}.container{max-width:1080px;margin:0 auto;padding:0 24px}section{padding:64px 0}
+nav{position:sticky;top:0;z-index:100;background:rgba(250,250,248,0.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);padding:14px 0}.nav-inner{display:flex;align-items:center;justify-content:space-between}.nav-logo{display:flex;align-items:center;gap:10px}.nav-logo svg{width:34px;height:34px}.nav-brand{font-family:var(--fd);font-weight:900;font-size:1rem}.nav-brand span{color:var(--fire);font-style:italic}.nav-links{display:flex;gap:24px;font-size:0.78rem;font-weight:500;color:var(--dim)}.nav-links a{color:var(--dim);transition:color 0.2s}.nav-links a:hover{color:var(--ink);text-decoration:none}.nav-cta{background:var(--fire);color:white;padding:8px 20px;border-radius:8px;font-size:0.76rem;font-weight:600;transition:all 0.2s;border:none;cursor:pointer}.nav-cta:hover{background:#D63D56;color:white;text-decoration:none}
+.hero{padding:72px 0 48px;text-align:center}.hero-badge{display:inline-flex;align-items:center;gap:8px;background:var(--fire2);color:var(--fire);font-size:0.68rem;font-weight:600;padding:6px 14px;border-radius:20px;margin-bottom:20px}.hero-badge .dot{width:6px;height:6px;background:var(--fire);border-radius:50%;animation:pulse 2s infinite}@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}.hero h1{font-family:var(--fd);font-weight:900;font-size:clamp(2rem,5vw,3rem);line-height:1.15;max-width:650px;margin:0 auto 20px}.hero h1 em{color:var(--fire);font-style:italic}.hero-text{font-size:0.9rem;color:var(--dim);max-width:580px;margin:0 auto 14px;line-height:1.8}.hero-text strong{color:var(--ink)}.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 26px;border-radius:10px;font-size:0.82rem;font-weight:600;transition:all 0.2s;cursor:pointer;border:none}.btn-primary{background:var(--fire);color:white}.btn-primary:hover{background:#D63D56;text-decoration:none;color:white}.btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--border)}.btn-outline:hover{border-color:var(--ink);text-decoration:none}
+.sh{margin-bottom:36px}.sh-label{font-family:var(--fm);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.14em;display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:16px;margin-bottom:12px}.sh-title{font-family:var(--fd);font-weight:900;font-size:clamp(1.5rem,3vw,2rem);line-height:1.2;margin-bottom:8px}.sh-title em{color:var(--fire);font-style:italic}.sh-desc{font-size:0.85rem;color:var(--dim);max-width:560px;line-height:1.75}
+.projects{display:flex;flex-direction:column;gap:24px}.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:all 0.3s}.pcard:hover{box-shadow:var(--shadow-md)}.pcard-inner{display:grid;grid-template-columns:1fr 1fr;min-height:260px}.pcard-content{padding:32px;display:flex;flex-direction:column;justify-content:center}.pcard-tag{font-family:var(--fm);font-size:0.42rem;text-transform:uppercase;letter-spacing:0.1em;padding:4px 10px;border-radius:5px;display:inline-block;width:fit-content;margin-bottom:10px}.pcard-icon{font-size:1.8rem;margin-bottom:8px}.pcard-name{font-family:var(--fd);font-weight:800;font-size:1.3rem;margin-bottom:8px}.pcard-desc{font-size:0.78rem;color:var(--dim);line-height:1.7;margin-bottom:16px}.pcard-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.pcard-hearts{display:flex;align-items:center;gap:6px;cursor:pointer;padding:6px 12px;border-radius:8px;transition:all 0.2s;border:1px solid var(--border)}.pcard-hearts:hover{background:var(--fire2);border-color:rgba(233,69,96,0.15)}.pcard-hearts.hearted .h-icon{color:var(--fire)}.h-icon{font-size:1rem;color:var(--muted);transition:all 0.2s}.h-count{font-family:var(--fm);font-size:0.7rem;color:var(--dim)}.pcard-status{font-size:0.6rem;font-weight:600;padding:4px 10px;border-radius:5px}.s-live{background:rgba(6,214,160,0.08);color:var(--forest)}.s-build{background:rgba(58,134,255,0.06);color:var(--ocean)}.s-soon{background:var(--violet2);color:var(--violet)}.s-idea{background:var(--sun2);color:#B8860B}.pcard-link{font-size:0.78rem;font-weight:600;color:var(--ocean)}
+.pcard-visual{background:var(--warm);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:240px}.pcard-visual-play{width:64px;height:64px;background:rgba(0,0,0,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s;z-index:2}.pcard-visual-play:hover{background:var(--fire);transform:scale(1.1)}.pcard-visual-play::after{content:'';width:0;height:0;border-left:20px solid white;border-top:12px solid transparent;border-bottom:12px solid transparent;margin-left:4px}.pcard-visual-label{position:absolute;bottom:12px;right:12px;font-family:var(--fm);font-size:0.45rem;text-transform:uppercase;letter-spacing:0.1em;background:rgba(0,0,0,0.6);color:white;padding:4px 10px;border-radius:6px}.pcard-visual-bg{position:absolute;inset:0;font-size:6rem;display:flex;align-items:center;justify-content:center;opacity:0.12}
+.level-sep{display:flex;align-items:center;gap:16px;margin:48px 0 32px}.level-sep-line{flex:1;height:1px;background:var(--border)}.level-sep-badge{font-family:var(--fm);font-size:0.5rem;text-transform:uppercase;letter-spacing:0.12em;padding:6px 16px;border-radius:20px;white-space:nowrap}
+.small-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;transition:all 0.3s}.scard:hover{box-shadow:var(--shadow-md);transform:translateY(-3px)}.scard-icon{font-size:1.6rem;margin-bottom:10px}.scard-name{font-family:var(--fd);font-weight:700;font-size:0.95rem;margin-bottom:6px}.scard-desc{font-size:0.7rem;color:var(--dim);line-height:1.65;margin-bottom:14px}.scard-bottom{display:flex;align-items:center;justify-content:space-between}.scard-hearts{display:flex;align-items:center;gap:5px;cursor:pointer;padding:4px 8px;border-radius:6px;transition:all 0.2s}.scard-hearts:hover{background:var(--fire2)}
+.cr-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}.cr-step{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:28px;text-align:center;transition:all 0.3s}.cr-step:hover{box-shadow:var(--shadow-md)}.cr-num{font-family:var(--fd);font-weight:900;font-size:2rem;margin-bottom:8px}.cr-title{font-family:var(--fd);font-weight:700;font-size:0.95rem;margin-bottom:6px}.cr-desc{font-size:0.7rem;color:var(--dim);line-height:1.65}
+.sub-box{background:var(--ink);color:white;border-radius:20px;padding:48px;text-align:center}.sub-desc{color:rgba(255,255,255,0.5);font-size:0.85rem;max-width:480px;margin:0 auto 24px;line-height:1.75}.sub-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}.sub-btn{display:inline-flex;align-items:center;gap:8px;padding:11px 22px;border-radius:10px;font-size:0.78rem;font-weight:600;transition:all 0.2s;border:1.5px solid rgba(255,255,255,0.12);color:white;background:rgba(255,255,255,0.04);cursor:pointer}.sub-btn:hover{background:rgba(255,255,255,0.1);border-color:rgba(255,255,255,0.25);color:white;text-decoration:none}.sub-fine{font-size:0.6rem;color:rgba(255,255,255,0.25);margin-top:16px}
+footer{padding:36px 0;border-top:1px solid var(--border)}.foot-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}.foot-logo{display:flex;align-items:center;gap:8px}.foot-brand{font-family:var(--fd);font-weight:700;font-size:0.85rem}.foot-brand span{color:var(--fire);font-style:italic}.foot-copy{font-size:0.6rem;color:var(--muted)}.foot-links{display:flex;gap:18px;font-size:0.7rem}.foot-links a{color:var(--dim)}.foot-links a:hover{color:var(--ink)}
+@media(max-width:768px){.nav-links{display:none}.pcard-inner{grid-template-columns:1fr}.pcard-visual{min-height:180px}.small-grid,.cr-steps{grid-template-columns:1fr}.sub-box{padding:36px 20px}}
+.rv{opacity:0;transform:translateY(20px);transition:all 0.5s cubic-bezier(0.16,1,0.3,1)}.rv.visible{opacity:1;transform:translateY(0)}
 </style>
 </head>
 <body>
 
-<nav>
-  <div class="nb"><div class="nl">🛡️</div><div class="nn">Short Main Story</div></div>
-  <div class="nk">
-    <a href="#intel">Intelligence</a>
-    <a href="#games">Games</a>
-    <a href="#tools">Tools</a>
-    <a href="#schools">Schools</a>
-    <a href="about.html">About</a>
-    <a href="subscribe.html" class="btn-n">Subscribe Free</a>
-  </div>
-</nav>
+<nav><div class="container nav-inner">
+<div class="nav-logo"><svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><path d="M60 8L16 28v32c0 28 18.7 54.2 44 62 25.3-7.8 44-34 44-62V28L60 8z" fill="#E94560"/><path d="M60 18L24 34v24c0 23.5 15.3 45.5 36 52 20.7-6.5 36-28.5 36-52V34L60 18z" fill="#1A1A2E"/><text x="60" y="78" text-anchor="middle" fill="white" font-family="Fraunces,serif" font-size="52" font-weight="900" font-style="italic">S</text></svg><div class="nav-brand">Short Main <span>Story</span></div></div>
+<div class="nav-links"><a href="#projects">Projects</a><a href="#coming">Life Tools</a><a href="#kids">Kids Games</a><a href="about.html">About</a></div>
+<a href="#join" class="nav-cta" style="text-decoration:none">Stay Updated</a>
+</div></nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hp">● Safety Intelligence Platform — Subscribe Free</div>
-  <h1>Know what's safe. Know what's <em>changing.</em> Know what's next.</h1>
-  <p class="hs">Safety games for families, smart tools for daily life, and real-time intelligence on threats, trends, and changes — delivered wherever you want it.</p>
-  <div class="hc">
-    <a href="#games" class="btn btn-p">🎮 Play Free Games</a>
-    <a href="subscribe.html" class="btn btn-tg">✈️ Join Telegram Channel</a>
-    <a href="subscribe.html" class="btn btn-s">📧 Get Weekly Digest</a>
-  </div>
-  <div class="hpr">
-    <div class="pr">🔬 <strong>Research-backed</strong></div>
-    <div class="pr">📡 <strong>Real-time alerts</strong></div>
-    <div class="pr">👨‍👩‍👧 <strong>Ages 5–65</strong></div>
-    <div class="pr">🆓 <strong>Free</strong></div>
-  </div>
-</section>
+<section class="hero"><div class="container">
+<div class="hero-badge"><span class="dot"></span> Free tools and games — built for real life</div>
+<h1>Smart tools for <em>real people</em></h1>
+<p class="hero-text" style="color:var(--ink);font-weight:500;font-size:0.95rem">We build simple, useful projects that help you and your family navigate the modern world — from spotting scams to staying healthy, from protecting your kids online to planning your career in the age of AI.</p>
+<p class="hero-text">Each project solves one real problem. Games that sharpen your instincts in minutes. Tools that give you answers you can actually use. Everything is designed to be simple, honest, and immediately helpful — no jargon, no upsells, no time wasted.</p>
+<div class="hero-btns">
+<a href="#projects" class="btn btn-primary">See Our Projects ↓</a>
+<a href="#join" class="btn btn-outline">Get Updates 📬</a>
+</div>
+</div></section>
 
-<!-- STATS -->
-<div class="stats">
-  <div class="stats-in">
-    <div class="si rv"><div class="sn">$16.6B</div><div class="sl">Lost to fraud in 2024</div></div>
-    <div class="si rv d1"><div class="sn">210M</div><div class="sl">Social media addicts globally</div></div>
-    <div class="si rv d2"><div class="sn">84%</div><div class="sl">Of kids who escaped used action</div></div>
-    <div class="si rv d3"><div class="sn">54%</div><div class="sl">Of teens can't quit social media</div></div>
-  </div>
+<!-- MAIN PROJECTS -->
+<section id="projects" style="background:var(--warm)"><div class="container">
+<div class="sh">
+<div class="sh-label" style="background:var(--fire2);color:var(--fire)">🚀 Our Projects</div>
+<div class="sh-title">Tools that <em>solve real problems</em></div>
+<div class="sh-desc">Each project exists because someone needed it. Simple, useful, honest. Heart ❤️ what matters to you.</div>
 </div>
 
-<!-- SAFETY INTELLIGENCE -->
-<section class="intel-sec" id="intel">
-  <div class="in">
-    <div class="intel-hero">
-      <div class="intel-icon rv">📡</div>
-      <div class="st rv" style="margin:0 auto;text-align:center">Your <em>safety forecast.</em> Every week.</div>
-      <div class="sd rv" style="margin:10px auto 0;text-align:center;max-width:520px">Like checking the weather before going outside — we tell you what's happening in the digital and consumer world before it affects your family.</div>
+<div class="projects">
 
-      <div class="intel-example rv">
-        <div class="intel-example-label">✈️ Example: Short Main Story Telegram Channel</div>
-        <div class="intel-msg" style="margin-bottom:8px">
-          <span class="tag tag-alert">⚠️ Alert</span> <strong>New Coca-Cola study</strong> links daily consumption to 40% higher risk of metabolic syndrome in teens. Here's what parents should know and what to replace it with → <u>Read more</u>
-        </div>
-        <div class="intel-msg" style="margin-bottom:8px">
-          <span class="tag tag-new">🆕 New</span> <strong>TikTok parental controls update</strong> rolled out today. New settings can limit DMs from strangers. We tested them — here's what actually works and what doesn't → <u>Setup guide</u>
-        </div>
-        <div class="intel-msg" style="margin-bottom:8px">
-          <span class="tag tag-trend">📊 Trend</span> <strong>Instagram investigation</strong> reveals algorithm still shows self-harm content to teen accounts despite promises. What to do RIGHT NOW to protect your child → <u>Action steps</u>
-        </div>
-        <div class="intel-msg">
-          <span class="tag tag-predict">🔮 Prediction</span> <strong>AI voice cloning</strong> is becoming free and instant. Within 6 months, scammers will call pretending to be your child. Here's how to prepare your family code word system → <u>Our guide</u>
-        </div>
-      </div>
-    </div>
+<div class="pcard rv"><div class="pcard-inner">
+<div class="pcard-content">
+<span class="pcard-tag" style="background:var(--fire2);color:var(--fire)">Emergency • Families & Elders</span>
+<div class="pcard-icon">🆘</div>
+<div class="pcard-name">ReHelp — Emergency SOS</div>
+<div class="pcard-desc">One button. Instant help. For elderly parents living alone, kids walking to school, partners traveling. Sends your exact location to emergency contacts with one tap. Works when you can't speak or type. Because when seconds matter, you need one button — not 12 menus.</div>
+<div class="pcard-actions">
+<div class="pcard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">2,341</span></div>
+<span class="pcard-status s-build">⚡ Beta Testing</span>
+<a href="#" class="pcard-link">Learn More →</a>
+</div></div>
+<div class="pcard-visual" style="background:linear-gradient(135deg,#FEF2F2,#FFF1F2)">
+<div class="pcard-visual-bg">🆘</div>
+<div class="pcard-visual-play" title="Watch demo on YouTube"></div>
+<div class="pcard-visual-label">▶ Watch Demo</div>
+</div></div></div>
 
-    <div class="intel-types">
-      <div class="intel-type rv">
-        <div class="it-emoji">⚠️</div>
-        <div class="it-name">Safety Alerts</div>
-        <div class="it-desc">New scam types, data breaches, product recalls, dangerous apps — know immediately so you can act.</div>
-        <div class="it-ex">"New WhatsApp scam targeting parents in Europe..."</div>
-      </div>
-      <div class="intel-type rv d1">
-        <div class="it-emoji">🔬</div>
-        <div class="it-name">Research Explained Simply</div>
-        <div class="it-desc">New studies on sugar, screens, AI, social media — translated from science into plain language families can actually use.</div>
-        <div class="it-ex">"New study: 2hrs screen time = same brain effect as..."</div>
-      </div>
-      <div class="intel-type rv d2">
-        <div class="it-emoji">🆕</div>
-        <div class="it-name">Platform Changes</div>
-        <div class="it-desc">TikTok, Instagram, Snapchat, Roblox update their rules constantly. We test new features and tell you: is it safe? What to change?</div>
-        <div class="it-ex">"Instagram new feature: here's what to turn OFF..."</div>
-      </div>
-      <div class="intel-type rv d3">
-        <div class="it-emoji">🔮</div>
-        <div class="it-name">Future Predictions</div>
-        <div class="it-desc">We analyze trends and predict what tools, scams, and changes are coming next — so you're prepared before they arrive.</div>
-        <div class="it-ex">"AI voice cloning will be mainstream in 6 months..."</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="pcard rv"><div class="pcard-inner" style="direction:rtl">
+<div class="pcard-content" style="direction:ltr">
+<span class="pcard-tag" style="background:var(--violet2);color:var(--violet)">Wellness • Adults 17+</span>
+<div class="pcard-icon">🎤</div>
+<div class="pcard-name">Vocal Release — Stress Relief Therapy</div>
+<div class="pcard-desc">Bad day at work? Can't yell at your boss, your kids, or the traffic? This app gives you a private, safe space to let it all out. Scream, vent, release — your phone measures intensity, not words. 100% private. Zero recording. 2 minutes to feel lighter. AI wellness coach included.</div>
+<div class="pcard-actions">
+<div class="pcard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">4,892</span></div>
+<span class="pcard-status s-build">⚡ Building</span>
+<a href="#" class="pcard-link">Coming Soon →</a>
+</div></div>
+<div class="pcard-visual" style="background:linear-gradient(135deg,#F3E8FF,#E9D5FF);direction:ltr">
+<div class="pcard-visual-bg">🎤</div>
+<div class="pcard-visual-play"></div>
+<div class="pcard-visual-label">▶ Preview</div>
+</div></div></div>
 
-<!-- CHANNELS / SUBSCRIBE -->
-<section class="ch-sec" id="subscribe">
-  <div class="in">
-    <div class="ey">Stay Connected</div>
-    <div class="st">Get updates <em>where you want them</em></div>
-    <div class="sd">No app needed. No app store. We come to where you already are.</div>
+<div class="pcard rv"><div class="pcard-inner">
+<div class="pcard-content">
+<span class="pcard-tag" style="background:var(--ocean2);color:var(--ocean)">Tool • Everyone</span>
+<div class="pcard-icon">🔎</div>
+<div class="pcard-name">Trust Check</div>
+<div class="pcard-desc">Is this company real? Is this website safe? Type any name, company, or website — get instant verification. Registry checks, sanctions, reviews, red flags. A background check you can run yourself, in seconds.</div>
+<div class="pcard-actions">
+<div class="pcard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">3,107</span></div>
+<span class="pcard-status s-build">⚡ Building</span>
+<a href="#" class="pcard-link">Coming Soon →</a>
+</div></div>
+<div class="pcard-visual" style="background:linear-gradient(135deg,#EFF6FF,#DBEAFE)">
+<div class="pcard-visual-bg">🔎</div>
+<div class="pcard-visual-play"></div>
+<div class="pcard-visual-label">▶ Preview</div>
+</div></div></div>
 
-    <div class="ch-grid">
-      <div class="ch-list">
-        <div class="ch-item rv">
-          <div class="ch-icon">✈️</div>
-          <div>
-            <div class="ch-name">Telegram Channel</div>
-            <div class="ch-desc">Instant alerts, breaking safety news, new tool launches, discussion with other parents. Free, no app store needed.</div>
-            <div class="ch-tag now">Available Now</div>
-          </div>
-        </div>
-        <div class="ch-item rv d1">
-          <div class="ch-icon">📧</div>
-          <div>
-            <div class="ch-name">Weekly Email Digest</div>
-            <div class="ch-desc">"The Safety Forecast" — weekly summary of alerts, research, platform changes, and predictions. Deep analysis in your inbox.</div>
-            <div class="ch-tag now">Available Now</div>
-          </div>
-        </div>
-        <div class="ch-item rv d2">
-          <div class="ch-icon">🌐</div>
-          <div>
-            <div class="ch-name">Web Platform (PWA)</div>
-            <div class="ch-desc">Full dashboard with personalized feed, push notifications, all games and tools. Install like an app — no app store.</div>
-            <div class="ch-tag next">Coming Soon</div>
-          </div>
-        </div>
-        <div class="ch-item rv d3">
-          <div class="ch-icon">💬</div>
-          <div>
-            <div class="ch-name">WhatsApp Channel</div>
-            <div class="ch-desc">Same alerts for families who prefer WhatsApp. Especially popular in Europe, Latin America, and Africa.</div>
-            <div class="ch-tag next">Coming Soon</div>
-          </div>
-        </div>
-        <div class="ch-item rv d4">
-          <div class="ch-icon">📱</div>
-          <div>
-            <div class="ch-name">Native Apps (iOS & Android)</div>
-            <div class="ch-desc">Full mobile experience — built only when community demand justifies the investment.</div>
-            <div class="ch-tag later">Future</div>
-          </div>
-        </div>
-      </div>
+</div></div></section>
 
-      <div class="ch-signup rv">
-        <h3>Join the Community</h3>
-        <p>Choose how you want to receive safety intelligence. Unsubscribe anytime. Always free.</p>
-        <div class="ch-signup-opt">
-          <a class="btn-ch btn-ch-tg" href="subscribe.html">✈️ Join Telegram Channel</a>
-          <a class="btn-ch btn-ch-email" href="subscribe.html">📧 Subscribe to Weekly Digest</a>
-          <a class="btn-ch btn-ch-wa" href="subscribe.html">💬 Join WhatsApp Channel</a>
-        </div>
-        <div class="ch-note">No spam. No selling data. Just safety intelligence.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- LIFE SKILLS -->
+<section id="coming"><div class="container">
+<div class="level-sep"><div class="level-sep-line"></div><div class="level-sep-badge" style="background:var(--sun2);color:#92400E">🧬 Life & Wellness Tools</div><div class="level-sep-line"></div></div>
+<div class="sh">
+<div class="sh-title">Your job. Your health. <em>Your food.</em></div>
+<div class="sh-desc">Practical tools for everyday life. Heart ❤️ what you need most — the most-wanted gets built first.</div>
+</div>
 
-<!-- GAMES -->
-<section class="games-sec" id="games">
-  <div class="in">
-    <div class="ey">Safety Games</div>
-    <div class="st">Four games. <em>Complete</em> family protection.</div>
-    <div class="sd">Interactive scenarios, real-world cases, hands-on practice you do together.</div>
-    <div class="gg">
-      <a class="gc rv" href="sms-detective-game.html">
-        <div class="ge">🕵️</div><div class="gt">Digital Safety</div>
-        <div class="gn">SMS Detective</div>
-        <div class="gd">Spot scam texts, phishing emails, fake ads. Distraction mechanics simulate real-life cognitive pressure.</div>
-        <div class="gm"><span>20 scenarios</span><span>•</span><span>Ages 5–65</span></div>
-      </a>
-      <a class="gc rv d1" href="street-smart-game.html">
-        <div class="ge">🦁</div><div class="gt">Physical Safety</div>
-        <div class="gn">Street Smart</div>
-        <div class="gd">Stranger danger where parents and kids practice TOGETHER — screaming drills, running, family code words.</div>
-        <div class="gm"><span>24 scenarios</span><span>•</span><span>Ages 5–16</span></div>
-      </a>
-      <a class="gc rv d2" href="ai-defender-game.html">
-        <div class="ge">🔍</div><div class="gt">Cyber Investigation</div>
-        <div class="gn">AI Defender</div>
-        <div class="gd">Solve real cybercrime cases. Trace Bitcoin, analyze deepfakes, crack email headers, expose scam networks.</div>
-        <div class="gm"><span>Real cases</span><span>•</span><span>Ages 10+</span></div>
-      </a>
-      <a class="gc rv d3" href="free-mind-game.html">
-        <div class="ge">🦋</div><div class="gt">Digital Wellness</div>
-        <div class="gn">Free Mind</div>
-        <div class="gd">See invisible tricks behind social media addiction, junk food, AI dependency, smoking. No judgment — just freedom.</div>
-        <div class="gm"><span>4 topics</span><span>•</span><span>Ages 10+</span></div>
-      </a>
-    </div>
-  </div>
-</section>
+<div class="small-grid">
+<div class="scard rv"><div class="scard-icon">🛡️</div><div class="scard-name">JobSafe</div><div class="scard-desc">Enter your job title and daily tasks. AI scores your automation risk per task and builds a personal 90-day reskilling plan using only free resources. Know your future before it surprises you.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">4,210</span></div><span class="pcard-status s-soon">🔮 Coming</span></div></div>
 
-<!-- TOOLS -->
-<section class="tools-sec" id="tools">
-  <div class="in">
-    <div class="ey">Smart Tools</div>
-    <div class="st">Beyond games: <em>tools</em> for daily life</div>
-    <div class="sd">From scam checking to investment intelligence — practical tools that put awareness into action.</div>
-    <div class="tg-grid">
-      <div class="tc rv">
-        <div class="tc-badge soon">Coming Soon</div>
-        <div class="tc-e">🛡️</div><div class="tc-n">Scam Shield</div>
-        <div class="tc-d">All-in-one scam protection. Paste any suspicious message for instant analysis, check sender reputation, get community-powered fraud alerts.</div>
-        <ul class="tc-f"><li>Instant scam analysis for any message</li><li>Phone number & sender reputation</li><li>Real-time scam database</li><li>Report scams to protect others</li></ul>
-      </div>
-      <div class="tc rv d1">
-        <div class="tc-badge soon">In Development</div>
-        <div class="tc-e">📊</div><div class="tc-n">SMS Invest</div>
-        <div class="tc-d">Investment intelligence — track companies, discover startups, get alerts on earnings, leadership changes, and market shifts. Delivered via Telegram, email, or web.</div>
-        <ul class="tc-f"><li>Real-time portfolio company tracking</li><li>Weekly startup & trend radar</li><li>AI analysis that assists, not replaces</li><li>Multi-channel delivery</li></ul>
-      </div>
-      <div class="tc rv d2">
-        <div class="tc-badge plan">Planned</div>
-        <div class="tc-e">🌍</div><div class="tc-n">SMS Translate</div>
-        <div class="tc-d">Instant message translation with built-in scam detection. Understand any message in any language — and know if it's safe.</div>
-      </div>
-      <div class="tc rv d3">
-        <div class="tc-badge plan">Planned</div>
-        <div class="tc-e">🎙️</div><div class="tc-n">SMS Voice</div>
-        <div class="tc-d">Voice-to-text for SMS with smart reply suggestions. Accessibility-first tool for elderly, disabled, or busy parents.</div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="scard rv"><div class="scard-icon">🥬</div><div class="scard-name">FridgeAI</div><div class="scard-desc">Photograph your fridge. AI instantly generates 3 recipes ranked by nutrition, cost, and cooking time. No grocery list needed. Eat well with what you already have.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">1,750</span></div><span class="pcard-status s-soon">🔮 Coming</span></div></div>
 
-<!-- DIFF -->
-<section class="diff-sec">
-  <div class="in" style="text-align:center">
-    <div class="ey" style="text-align:center">Why Short Main Story</div>
-    <div class="st" style="margin:0 auto;text-align:center">The old way <em>doesn't work</em></div>
-    <div class="dg">
-      <div class="dc old rv">
-        <div class="dl">Traditional Approach</div>
-        <div class="di"><span>😴</span><span>One-time school assembly — forgotten in a week</span></div>
-        <div class="di"><span>📄</span><span>Boring pamphlets nobody reads</span></div>
-        <div class="di"><span>😱</span><span>Fear-based messaging that paralyzes</span></div>
-        <div class="di"><span>🔇</span><span>No ongoing updates when threats change</span></div>
-        <div class="di"><span>👤</span><span>Child learns alone — parents disconnected</span></div>
-      </div>
-      <div class="dc new rv d1">
-        <div class="dl">Short Main Story</div>
-        <div class="di"><span>🎮</span><span>Interactive games families WANT to replay</span></div>
-        <div class="di"><span>🧠</span><span>Understand HOW manipulation tricks work</span></div>
-        <div class="di"><span>📡</span><span>Real-time safety intelligence as threats evolve</span></div>
-        <div class="di"><span>🔮</span><span>Predict future threats before they arrive</span></div>
-        <div class="di"><span>👨‍👩‍👧</span><span>Parent-child together — whole family protected</span></div>
-      </div>
-    </div>
-  </div>
-</section>
+<div class="scard rv"><div class="scard-icon">🌙</div><div class="scard-name">DreamRx</div><div class="scard-desc">Sleep better tonight. AI analyzes your habits, schedule, and stress patterns — then builds a personal sleep program. Better dreams, deeper rest, more energy. Works for night owls, shift workers, and anyone who stares at the ceiling at 3am.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">1,980</span></div><span class="pcard-status s-idea">💡 Idea</span></div></div>
 
-<!-- QUOTE -->
-<section class="quote-sec" style="background:var(--cream);text-align:center">
-  <div class="in" style="max-width:600px;margin:0 auto">
-    <div style="font-size:3rem;margin-bottom:12px">💬</div>
-    <div class="rv" style="font-family:var(--fd);font-weight:700;font-size:clamp(1.2rem,3vw,1.8rem);line-height:1.4;font-style:italic;color:var(--ink)">
-      "Mom! Today I learned how to protect myself AND my friends! Can we practice together at home?"
-    </div>
-    <div style="margin-top:12px;font-size:0.82rem;color:var(--dim)">
-      This is what happens when safety training becomes something kids are <strong>excited</strong> about.
-    </div>
-  </div>
-</section>
+<div class="scard rv"><div class="scard-icon">💪</div><div class="scard-name">Health Hub</div><div class="scard-desc">Science-backed training. Fat burning that works. Bad habit fighting. Workout plans and video exercises. Diet truth vs marketing lies. Real results, not Instagram fantasy.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">2,103</span></div><span class="pcard-status s-build">⚡ Building</span></div></div>
+</div>
+</div></section>
 
-<!-- SCHOOLS -->
-<section class="school-sec" id="schools">
-  <div class="in">
-    <div class="ey">For Schools & Districts</div>
-    <div class="st">Safety education kids <em>bring home</em></div>
-    <div class="sd">The only curriculum where students teach their parents. Organic family protection at scale.</div>
-    <div class="sg">
-      <div>
-        <div class="sf rv"><div class="sf-i">🎮</div><div><div class="sf-t">95%+ engagement</div><div class="sf-p">Interactive games on any device beat assemblies. Students replay voluntarily.</div></div></div>
-        <div class="sf rv d1"><div class="sf-i">📊</div><div><div class="sf-t">Teacher dashboard</div><div class="sf-p">Track progress, completion, and skills that need more practice.</div></div></div>
-        <div class="sf rv d2"><div class="sf-i">👨‍👩‍👧</div><div><div class="sf-t">Parent homework cards</div><div class="sf-p">QR code cards extend learning into families. The strongest viral loop.</div></div></div>
-        <div class="sf rv d3"><div class="sf-i">🌍</div><div><div class="sf-t">Multi-language</div><div class="sf-p">English, French, German, Spanish, Portuguese and growing.</div></div></div>
-      </div>
-      <div class="scta rv">
-        <h3>School License</h3>
-        <div class="spr">$2</div>
-        <div class="spr-n">per student / per year</div>
-        <ul class="slist">
-          <li>All 4 games, all scenarios</li>
-          <li>New content monthly</li>
-          <li>Teacher dashboard</li>
-          <li>Parent homework cards</li>
-          <li>Completion certificates</li>
-        </ul>
-        <a class="btn-sc" href="mailto:hello@shortmainstory.com?subject=School%20Pilot">Request Free Pilot →</a>
-        <div style="font-size:0.58rem;color:var(--muted);margin-top:7px">Free semester trial</div>
-      </div>
-    </div>
-  </div>
-</section>
+<!-- KIDS & FAMILY GAMES -->
+<section id="kids" style="background:var(--warm)"><div class="container">
+<div class="level-sep"><div class="level-sep-line"></div><div class="level-sep-badge" style="background:var(--forest2);color:var(--forest)">🎮 Kids & Family Safety Games</div><div class="level-sep-line"></div></div>
+<div class="sh">
+<div class="sh-title">Safety skills through <em>play</em></div>
+<div class="sh-desc">Short interactive games that build real instincts. For kids, teens, and the whole family. Play together — learn together.</div>
+</div>
 
-<!-- CTA -->
-<section class="cta-sec">
-  <h2>Stay informed. Stay safe. <em>Stay free.</em></h2>
-  <p>Safety games. Smart tools. Real-time intelligence. All free. Delivered where you already are.</p>
-  <div class="cta-btns">
-    <a href="#games" class="btn btn-p" style="background:white;color:var(--ink)">🎮 Play Free Games</a>
-    <a href="subscribe.html" class="btn btn-tg">✈️ Join Telegram</a>
-    <a href="subscribe.html" class="btn btn-s" style="border-color:rgba(255,255,255,0.15);color:rgba(255,255,255,0.7)">📧 Weekly Digest</a>
-  </div>
-</section>
+<div class="small-grid" style="grid-template-columns:repeat(3,1fr)">
+<div class="scard rv"><div class="scard-icon">🚸</div><div class="scard-name">Street Smart</div><div class="scard-desc">Stranger danger for the modern world. 24 scenarios across 4 age groups. What if someone offers a ride? What if an adult asks for "help"? Practice safe choices before the real moment comes.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">1,204</span></div><span class="pcard-status s-live">✓ Live</span></div></div>
 
-<footer>
-  <div class="fb">Short Main Story</div>
-  <div class="fs">Safety intelligence for families. Games. Tools. Alerts. Freedom.</div>
-  <div class="fl">
-    <a href="#intel">Intelligence</a><a href="#games">Games</a><a href="#tools">Tools</a>
-    <a href="#schools">Schools</a><a href="about.html">About</a><a href="mailto:hello@shortmainstory.com">Contact</a><a href="#">Privacy</a>
-  </div>
-  <div class="fc">© 2026 Short Main Story. All rights reserved.</div>
-</footer>
+<div class="scard rv"><div class="scard-icon">🤖</div><div class="scard-name">AI Defender</div><div class="scard-desc">Become a cyber detective. Investigate romance scammers, deepfake CEOs, crypto heists. Use forensic tools to follow evidence. Learn how AI crime works — so you never become a victim.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">692</span></div><span class="pcard-status s-live">✓ Live</span></div></div>
+
+<div class="scard rv"><div class="scard-icon">🔍</div><div class="scard-name">SMS Detective</div><div class="scard-desc">Can you spot a scam text? Real messages using real manipulation techniques. Train your instincts to detect fraud in seconds — before you click that link. Play alone or challenge your family.</div><div class="scard-bottom"><div class="scard-hearts" onclick="toggleHeart(this)"><span class="h-icon">♡</span><span class="h-count">847</span></div><span class="pcard-status s-live">✓ Live</span></div></div>
+</div>
+</div></section>
+
+<!-- JOIN -->
+<section id="join"><div class="container">
+<div class="sub-box">
+<div class="sh-title" style="color:white">Stay <em>updated</em></div>
+<div class="sub-desc">New project launches, feature updates, and useful tips. No spam, no fluff — just the things that matter. Choose how you want to hear from us.</div>
+<div class="sub-btns">
+<a href="#" class="sub-btn">📱 Telegram</a>
+<a href="#" class="sub-btn">📧 Email Updates</a>
+<a href="#" class="sub-btn">💬 WhatsApp</a>
+</div>
+<div class="sub-fine">No spam. No data selling. Just updates on projects you care about.</div>
+</div>
+</div></section>
+
+<footer><div class="container foot-inner">
+<div><div class="foot-logo"><svg viewBox="0 0 120 120" width="26" height="26" xmlns="http://www.w3.org/2000/svg"><path d="M60 8L16 28v32c0 28 18.7 54.2 44 62 25.3-7.8 44-34 44-62V28L60 8z" fill="#E94560"/><path d="M60 18L24 34v24c0 23.5 15.3 45.5 36 52 20.7-6.5 36-28.5 36-52V34L60 18z" fill="#1A1A2E"/><text x="60" y="78" text-anchor="middle" fill="white" font-family="serif" font-size="52" font-weight="900" font-style="italic">S</text></svg><div class="foot-brand">Short Main <span>Story</span></div></div><div class="foot-copy">Useful tools for real life. © 2026</div></div>
+<div class="foot-links"><a href="about.html">About</a><a href="#projects">Projects</a><a href="mailto:hello@shortmainstory.com">Contact</a></div>
+</div></footer>
 
 <script>
-const o=new IntersectionObserver(e=>{e.forEach(n=>{if(n.isIntersecting)n.target.classList.add('vis')})},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv').forEach(el=>o.observe(el));
-document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{e.preventDefault();const t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth',block:'start'})})});
+function toggleHeart(el){el.classList.toggle('hearted');const i=el.querySelector('.h-icon'),c=el.querySelector('.h-count');if(el.classList.contains('hearted')){i.textContent='♥';i.style.color='#E94560';c.textContent=(parseInt(c.textContent.replace(/,/g,''))+1).toLocaleString()}else{i.textContent='♡';i.style.color='#9CA3AF';c.textContent=(parseInt(c.textContent.replace(/,/g,''))-1).toLocaleString()}}
+const obs=new IntersectionObserver(e=>{e.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
 </script>
 </body>
 </html>
